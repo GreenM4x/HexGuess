@@ -1,1 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code&display=swap");
+
+:root {
+  --background-color: #11151c;
+  --secondary-color: #212d40;
+  --primary-color: #5a78ab;
+  --text-color: #ffffff;
+}
+
+body {
+  background-color: var(--background-color);
+}
+
+.fira {
+  font-family: "Fira Code", monospace;
+}

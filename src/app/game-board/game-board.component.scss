@@ -1,0 +1,55 @@
+.title {
+  color: var(--text-color);
+
+  span {
+    color: var(--primary-color);
+  }
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 50px;
+
+  .game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+
+    .color-to-guess {
+      display: flex;
+      background-color: var(--secondary-color);
+      width: 75vw;
+      aspect-ratio: 1;
+    }
+
+    .btn-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      .btn {
+        background-color: var(--secondary-color);
+        width: 45vw;
+        aspect-ratio: 3/1;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .option {
+          margin: 0;
+          color: var(--text-color);
+          font-size: large;
+          text-transform: uppercase;
+        }
+        span {
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+}
