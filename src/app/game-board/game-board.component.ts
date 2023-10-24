@@ -14,12 +14,12 @@ export class GameBoardComponent implements OnInit {
   colorToGuess: string = '000000';
 
   ngOnInit(): void {
-    this.setBoard();
+    this.SetBoard();
   }
 
-  setBoard() {
+  SetBoard() {
     let indeces = [1, 2, 3, 4];
-    indeces = this.shuffleArray(indeces);
+    indeces = this.ShuffleArray(indeces);
 
     this.optionOne = this.GenerateRandomHex();
     this.optionTwo = this.GenerateRandomHex();
@@ -45,7 +45,7 @@ export class GameBoardComponent implements OnInit {
     }
   }
 
-  shuffleArray<T>(array: T[]): T[] {
+  ShuffleArray<T>(array: T[]): T[] {
     const shuffledArray = [...array];
 
     for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -71,7 +71,36 @@ export class GameBoardComponent implements OnInit {
     return color;
   }
 
-  setColorToGuess(color: string) {
+  SetColorToGuess(color: string) {
     this.colorToGuess = color;
+  }
+
+  CheckForWin(btnIndex: number) {
+    switch (btnIndex) {
+      case 1:
+        if (this.colorToGuess === this.optionOne) {
+          console.log(true);
+          this.SetBoard();
+        } else console.log(false);
+        break;
+      case 2:
+        if (this.colorToGuess === this.optionTwo) {
+          console.log(true);
+          this.SetBoard();
+        } else console.log(false);
+        break;
+      case 3:
+        if (this.colorToGuess === this.optionThree) {
+          console.log(true);
+          this.SetBoard();
+        } else console.log(false);
+        break;
+      case 4:
+        if (this.colorToGuess === this.optionFour) {
+          console.log(true);
+          this.SetBoard();
+        } else console.log(false);
+        break;
+    }
   }
 }
