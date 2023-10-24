@@ -11,7 +11,7 @@
     flex-direction: column;
     align-items: center;
 
-    gap: 125px;
+    gap: 10vh;
 
     .color-to-guess {
       display: flex;
@@ -19,7 +19,7 @@
       justify-content: center;
       background-color: var(--secondary-color);
       transform: rotate(45deg);
-      width: 65vw;
+      width: 50vw;
       aspect-ratio: 1;
 
       &::after {
@@ -28,7 +28,7 @@
         width: 80%;
         height: 80%;
         transform: rotate(45deg);
-        box-shadow: 0px 0px 15px 5px #000000;
+        box-shadow: 0px 0px 10px 1px #000000;
       }
     }
 
