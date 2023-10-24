@@ -6,17 +6,61 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./game-board.component.scss'],
 })
 export class GameBoardComponent implements OnInit {
-  optionOne: string = '7f75ed';
-  optionTwo: string = 'd00914';
-  optionThree: string = '989193';
-  optionFour: string = 'd73db0';
+  optionOne: string = '000000';
+  optionTwo: string = '000000';
+  optionThree: string = '000000';
+  optionFour: string = '000000';
 
-  colorToGuess: string = 'ffffff';
+  colorToGuess: string = '000000';
 
   ngOnInit(): void {
-    this.GenerateRandomHex();
+    this.setBoard();
   }
-  GenerateRandomHex() {
+
+  setBoard() {
+    let indeces = [1, 2, 3, 4];
+    indeces = this.shuffleArray(indeces);
+
+    this.optionOne = this.GenerateRandomHex();
+    this.optionTwo = this.GenerateRandomHex();
+    this.optionThree = this.GenerateRandomHex();
+    this.optionFour = this.GenerateRandomHex();
+
+    switch (indeces[0]) {
+      case 1:
+        this.colorToGuess = this.optionOne;
+        break;
+      case 2:
+        this.colorToGuess = this.optionTwo;
+        break;
+      case 3:
+        this.colorToGuess = this.optionThree;
+        break;
+      case 4:
+        this.colorToGuess = this.optionFour;
+        break;
+      default:
+        this.colorToGuess = this.GenerateRandomHex();
+        break;
+    }
+  }
+
+  shuffleArray<T>(array: T[]): T[] {
+    const shuffledArray = [...array];
+
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+
+      [shuffledArray[i], shuffledArray[j]] = [
+        shuffledArray[j],
+        shuffledArray[i],
+      ];
+    }
+
+    return shuffledArray;
+  }
+
+  GenerateRandomHex(): string {
     const letters = '0123456789ABCDEF';
     let color = '';
 
@@ -24,6 +68,10 @@ export class GameBoardComponent implements OnInit {
       color += letters[Math.floor(Math.random() * 16)];
     }
 
+    return color;
+  }
+
+  setColorToGuess(color: string) {
     this.colorToGuess = color;
   }
 }
