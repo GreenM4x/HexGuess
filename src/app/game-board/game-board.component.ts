@@ -10,4 +10,6 @@ export class GameBoardComponent {
   optionTwo: string = 'd00914';
   optionThree: string = '989193';
   optionFour: string = 'd73db0';
+
+  colorToGuess: string = '#d73db0';
 }

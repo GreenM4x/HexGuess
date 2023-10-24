@@ -1,0 +1,10 @@
+.title {
+  position: absolute;
+  text-align: center;
+  width: 100vw;
+  color: var(--text-color);
+
+  span {
+    color: var(--primary-color);
+  }
+}
