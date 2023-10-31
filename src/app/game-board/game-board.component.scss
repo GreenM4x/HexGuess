@@ -39,7 +39,7 @@
       gap: 10px;
       .btn {
         background-color: var(--secondary-color);
-        width: 45vw;
+        width: calc(45vw - 10px);
         aspect-ratio: 3/1;
 
         display: flex;
