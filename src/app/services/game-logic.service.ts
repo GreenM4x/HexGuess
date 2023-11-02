@@ -6,6 +6,9 @@ import { Injectable } from '@angular/core';
 export class GameLogicService {
   constructor() {}
 
+  lives: boolean[] = [false, false, false];
+  counter: number = 0;
+
   gameObj: { colorToGuess: string; optionsArr: string[] } = {
     colorToGuess: '000000',
     optionsArr: ['000000', '111111', '222222', '333333'],

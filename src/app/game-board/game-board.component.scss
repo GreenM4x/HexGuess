@@ -13,6 +13,10 @@
 
     gap: 10vh;
 
+    .hearts {
+      display: flex;
+      gap: 10px;
+    }
     .color-to-guess {
       display: flex;
       align-items: center;

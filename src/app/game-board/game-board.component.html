@@ -1,5 +1,8 @@
 <div class="container">
   <div class="game-container">
+    <div class="hearts">
+      <app-heart *ngFor="let i of [false, true, true]" [isDead]="i"></app-heart>
+    </div>
     <div
       class="color-to-guess"
       [ngStyle]="{

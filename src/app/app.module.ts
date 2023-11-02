@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { GameBoardComponent } from './game-board/game-board.component';
 import { HeaderComponent } from './header/header.component';
 import { ButtonComponent } from './game-board/game-components/button/button.component';
+import { HeartComponent } from './game-board/game-components/heart/heart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameBoardComponent,
     HeaderComponent,
-    ButtonComponent
+    ButtonComponent,
+    HeartComponent
   ],
   imports: [
     BrowserModule,
