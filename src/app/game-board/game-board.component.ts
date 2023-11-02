@@ -13,4 +13,13 @@ export class GameBoardComponent implements OnInit {
   ngOnInit(): void {
     this.gameBoard = this.glService.SetBoard();
   }
+
+  checkForWin(color: string) {
+    if (this.glService.CheckForWin(color)) {
+      console.log('Win');
+      this.gameBoard = this.glService.SetBoard();
+    } else {
+      console.log('Lose');
+    }
+  }
 }

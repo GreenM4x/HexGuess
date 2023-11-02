@@ -17,7 +17,6 @@ export class GameLogicService {
 
     this.gameObj.optionsArr.forEach((_, i) => {
       this.gameObj.optionsArr[i] = this.GenerateRandomHex();
-      console.log(this.gameObj.optionsArr[i]);
     });
 
     switch (indeces[0]) {

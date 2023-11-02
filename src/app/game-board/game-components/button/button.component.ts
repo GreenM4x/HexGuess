@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { GameLogicService } from 'src/app/services/game-logic.service';
 
 @Component({
@@ -9,8 +9,9 @@ import { GameLogicService } from 'src/app/services/game-logic.service';
 export class ButtonComponent {
   constructor(private glService: GameLogicService) {}
   @Input() option!: string;
+  @Output() btnClicked: EventEmitter<string> = new EventEmitter<string>();
 
   btnPressed() {
-    console.log(this.glService.CheckForWin(this.option));
+    this.btnClicked.emit(this.option);
   }
 }

@@ -8,6 +8,7 @@
     ></div>
     <div class="btn-container">
       <app-button
+        (btnClicked)="checkForWin($event)"
         *ngFor="let i of gameBoard.optionsArr"
         [option]="i"
       ></app-button>
