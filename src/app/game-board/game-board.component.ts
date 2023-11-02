@@ -15,11 +15,9 @@ export class GameBoardComponent implements OnInit {
   }
 
   checkForWin(color: string) {
-    if (this.glService.CheckForWin(color)) {
-      console.log('Win');
-      this.gameBoard = this.glService.SetBoard();
-    } else {
-      console.log('Lose');
-    }
+    if (this.glService.CheckForWin(color))
+      setTimeout(() => {
+        this.gameBoard = this.glService.SetBoard();
+      }, 1000);
   }
 }

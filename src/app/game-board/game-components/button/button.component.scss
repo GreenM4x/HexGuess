@@ -1,5 +1,6 @@
 .btn {
   background-color: var(--secondary-color);
+  transition: background-color ease-in-out 100ms;
   width: calc(45vw - 10px);
   aspect-ratio: 3/1;
 
@@ -16,4 +17,17 @@
   span {
     color: var(--primary-color);
   }
+
+  &:active {
+    background-color: #212d4067;
+  }
+}
+
+.right {
+  background-color: #266e22;
+  transition: background-color ease-in-out 100ms;
+}
+.wrong {
+  background-color: #6e2222;
+  transition: background-color ease-in-out 100ms;
 }

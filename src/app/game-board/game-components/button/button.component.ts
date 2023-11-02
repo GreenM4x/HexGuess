@@ -11,7 +11,11 @@ export class ButtonComponent {
   @Input() option!: string;
   @Output() btnClicked: EventEmitter<string> = new EventEmitter<string>();
 
+  isRight: 'right' | 'wrong' | 'unset' = 'unset';
+
   btnPressed() {
     this.btnClicked.emit(this.option);
+    if (this.glService.CheckForWin(this.option)) this.isRight = 'right';
+    else this.isRight = 'wrong';
   }
 }
