@@ -3,22 +3,14 @@
     <div
       class="color-to-guess"
       [ngStyle]="{
-      '--color-to-guess': '#' + colorToGuess,
+      '--color-to-guess': '#' + gameBoard.colorToGuess,
     }"
     ></div>
     <div class="btn-container">
-      <div class="btn fira" (click)="CheckForWin(1)">
-        <p class="option"><span>#</span>{{ optionOne }}</p>
-      </div>
-      <div class="btn fira" (click)="CheckForWin(2)">
-        <p class="option"><span>#</span>{{ optionTwo }}</p>
-      </div>
-      <div class="btn fira" (click)="CheckForWin(3)">
-        <p class="option"><span>#</span>{{ optionThree }}</p>
-      </div>
-      <div class="btn fira" (click)="CheckForWin(4)">
-        <p class="option"><span>#</span>{{ optionFour }}</p>
-      </div>
+      <app-button
+        *ngFor="let i of gameBoard.optionsArr"
+        [option]="i"
+      ></app-button>
     </div>
   </div>
 </div>

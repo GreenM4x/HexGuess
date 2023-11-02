@@ -1,0 +1,19 @@
+.btn {
+  background-color: var(--secondary-color);
+  width: calc(45vw - 10px);
+  aspect-ratio: 3/1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .option {
+    margin: 0;
+    color: var(--text-color);
+    font-size: large;
+    text-transform: uppercase;
+  }
+  span {
+    color: var(--primary-color);
+  }
+}
