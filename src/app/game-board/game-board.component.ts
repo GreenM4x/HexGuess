@@ -9,9 +9,14 @@ import { GameLogicService } from '../services/game-logic.service';
 export class GameBoardComponent implements OnInit {
   constructor(private glService: GameLogicService) {}
 
+  lives!: boolean[];
+
   gameBoard!: { colorToGuess: string; optionsArr: string[] };
   ngOnInit(): void {
     this.gameBoard = this.glService.SetBoard();
+    this.glService.livesArr.subscribe((Arr) => {
+      this.lives = Arr;
+    });
   }
 
   checkForWin(color: string) {
@@ -19,5 +24,6 @@ export class GameBoardComponent implements OnInit {
       setTimeout(() => {
         this.gameBoard = this.glService.SetBoard();
       }, 1000);
+    else this.glService.UpdatedLifes();
   }
 }

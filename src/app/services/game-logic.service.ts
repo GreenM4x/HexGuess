@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -6,8 +7,14 @@ import { Injectable } from '@angular/core';
 export class GameLogicService {
   constructor() {}
 
-  lives: boolean[] = [false, false, false];
-  counter: number = 0;
+  lives: number = 3;
+  livesArr: BehaviorSubject<boolean[]> = new BehaviorSubject<boolean[]>([
+    false,
+    false,
+    false,
+  ]);
+
+  score: number = 0;
 
   gameObj: { colorToGuess: string; optionsArr: string[] } = {
     colorToGuess: '000000',
@@ -76,5 +83,12 @@ export class GameLogicService {
   CheckForWin(option: string): boolean {
     if (option === this.gameObj.colorToGuess) return true;
     else return false;
+  }
+
+  UpdatedLifes() {
+    const currentValue = this.livesArr.getValue();
+    currentValue[this.lives - 1] = true;
+    this.lives--;
+    this.livesArr.next(currentValue);
   }
 }
