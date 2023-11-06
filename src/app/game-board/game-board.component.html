@@ -6,12 +6,14 @@
     <div class="hearts">
       <app-heart *ngFor="let i of lives" [isDead]="i"></app-heart>
     </div>
-    <div
-      class="color-to-guess"
-      [ngStyle]="{
+    <div class="ctg-container">
+      <div
+        class="color-to-guess"
+        [ngStyle]="{
       '--color-to-guess': '#' + gameBoard.colorToGuess,
     }"
-    ></div>
+      ></div>
+    </div>
     <div class="btn-container">
       <app-button
         (btnClicked)="checkForWin($event)"
