@@ -12,7 +12,7 @@ export class GameLogicService {
     optionsArr: ['000000', '111111', '222222', '333333'],
   };
 
-  private timer: number = 60;
+  private currentTimer: number = 60;
 
   private lives: number = 3;
 
@@ -49,6 +49,8 @@ export class GameLogicService {
         this.gameObj.colorToGuess = this.GenerateRandomHex();
         break;
     }
+
+    /* this.CountdownTimer(); */
 
     return this.gameObj;
   }
@@ -92,8 +94,7 @@ export class GameLogicService {
   }
 
   UpdateScore() {
-    const currentValue = this.score.getValue();
-    this.score.next(currentValue + 1);
+    this.score.next(this.currentTimer);
   }
 
   UpdateLifes() {
@@ -101,5 +102,19 @@ export class GameLogicService {
     currentValue[this.lives - 1] = true;
     this.lives--;
     this.livesArr.next(currentValue);
+  }
+
+  CountdownTimer() {
+    this.currentTimer = 60;
+    const timer = setInterval(() => {
+      this.currentTimer--;
+      console.log(`Remaining time: ${this.currentTimer} seconds`);
+
+      if (this.currentTimer === 0) {
+        clearInterval(timer);
+        this.UpdateLifes();
+        this.SetBoard();
+      }
+    }, 1000);
   }
 }
