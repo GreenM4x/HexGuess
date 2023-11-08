@@ -15,7 +15,10 @@ export class ButtonComponent {
 
   btnPressed() {
     this.btnClicked.emit(this.option);
-    if (this.glService.CheckForWin(this.option)) this.isRight = 'right';
-    else this.isRight = 'wrong';
+    if (this.glService.CheckForWin(this.option)) {
+      this.isRight = 'right';
+    } else {
+      this.isRight = 'wrong';
+    }
   }
 }

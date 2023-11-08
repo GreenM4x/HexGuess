@@ -81,8 +81,13 @@ export class GameLogicService {
   }
 
   CheckForWin(option: string): boolean {
-    if (option === this.gameObj.colorToGuess) return true;
-    else return false;
+    if (option === this.gameObj.colorToGuess) {
+      this.score++;
+      console.log(this.score);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   UpdatedLifes() {
