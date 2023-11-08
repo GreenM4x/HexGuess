@@ -7,19 +7,22 @@ import { BehaviorSubject } from 'rxjs';
 export class GameLogicService {
   constructor() {}
 
-  lives: number = 3;
-  livesArr: BehaviorSubject<boolean[]> = new BehaviorSubject<boolean[]>([
+  private gameObj: { colorToGuess: string; optionsArr: string[] } = {
+    colorToGuess: '000000',
+    optionsArr: ['000000', '111111', '222222', '333333'],
+  };
+
+  private timer: number = 60;
+
+  private lives: number = 3;
+
+  public livesArr: BehaviorSubject<boolean[]> = new BehaviorSubject<boolean[]>([
     false,
     false,
     false,
   ]);
 
-  score: number = 0;
-
-  gameObj: { colorToGuess: string; optionsArr: string[] } = {
-    colorToGuess: '000000',
-    optionsArr: ['000000', '111111', '222222', '333333'],
-  };
+  public score: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   SetBoard(): { colorToGuess: string; optionsArr: string[] } {
     let indeces = [1, 2, 3, 4];
@@ -82,15 +85,18 @@ export class GameLogicService {
 
   CheckForWin(option: string): boolean {
     if (option === this.gameObj.colorToGuess) {
-      this.score++;
-      console.log(this.score);
       return true;
     } else {
       return false;
     }
   }
 
-  UpdatedLifes() {
+  UpdateScore() {
+    const currentValue = this.score.getValue();
+    this.score.next(currentValue + 1);
+  }
+
+  UpdateLifes() {
     const currentValue = this.livesArr.getValue();
     currentValue[this.lives - 1] = true;
     this.lives--;
