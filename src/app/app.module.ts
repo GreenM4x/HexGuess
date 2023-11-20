@@ -9,6 +9,7 @@ import { ButtonComponent } from './game-board/game-components/button/button.comp
 import { HeartComponent } from './game-board/game-components/heart/heart.component';
 import { ScoreComponent } from './game-board/game-components/score/score.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { TimerComponent } from './header/timer/timer.component';
 
 @NgModule({
 	declarations: [
@@ -20,6 +21,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 		ScoreComponent,
 	],
 	imports: [
+		TimerComponent,
 		BrowserModule,
 		AppRoutingModule,
 		ServiceWorkerModule.register('ngsw-worker.js', {

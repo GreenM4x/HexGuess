@@ -1,29 +1,30 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class GameLogicService {
-	constructor() {}
-
-	private gameObj: { colorToGuess: string; optionsArr: string[] } = {
-		colorToGuess: '000000',
-		optionsArr: ['000000', '111111', '222222', '333333'],
-	};
-
-	private currentTimer: number = 60;
-	private timerInterval: NodeJS.Timeout | undefined;
-
-	private lives: number = 3;
-
 	public livesArr: BehaviorSubject<boolean[]> = new BehaviorSubject<boolean[]>([
 		false,
 		false,
 		false,
 	]);
-
 	public score: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
+	private gameObj: { colorToGuess: string; optionsArr: string[] } = {
+		colorToGuess: '000000',
+		optionsArr: ['000000', '111111', '222222', '333333'],
+	};
+	private currentTimer = signal(60);
+	private timerInterval: ReturnType<typeof setTimeout> | undefined;
+	private lives: number = 3;
+
+	public get getTimer(): number {
+		return this.currentTimer();
+	}
+
+	constructor() {}
 
 	setBoard(): { colorToGuess: string; optionsArr: string[] } {
 		let indeces = [1, 2, 3, 4];
@@ -96,7 +97,7 @@ export class GameLogicService {
 	}
 
 	updateScore() {
-		this.score.next(this.score.value + this.currentTimer);
+		this.score.next(this.score.value + this.currentTimer());
 	}
 
 	updateLifes() {
@@ -107,11 +108,11 @@ export class GameLogicService {
 	}
 
 	startCountdownTimer() {
-		this.currentTimer = 60;
+		this.currentTimer.set(60);
 		this.timerInterval = setInterval(() => {
-			this.currentTimer--;
+			this.currentTimer.update(prev => prev - 1);
 
-			if (this.currentTimer === 0) {
+			if (this.currentTimer() === 0) {
 				this.resetCountdownTimer();
 				this.updateLifes();
 				this.setBoard();
