@@ -11,12 +11,13 @@ export class GameLogicService {
 		false,
 	]);
 	public score: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+	public readonly INITIAL_TIMER_VALUE = 60;
 
 	private gameObj: { colorToGuess: string; optionsArr: string[] } = {
 		colorToGuess: '000000',
 		optionsArr: ['000000', '111111', '222222', '333333'],
 	};
-	private currentTimer = signal(60);
+	private currentTimer = signal(this.INITIAL_TIMER_VALUE);
 	private timerInterval: ReturnType<typeof setTimeout> | undefined;
 	private lives: number = 3;
 
@@ -108,7 +109,7 @@ export class GameLogicService {
 	}
 
 	startCountdownTimer() {
-		this.currentTimer.set(60);
+		this.currentTimer.set(this.INITIAL_TIMER_VALUE);
 		this.timerInterval = setInterval(() => {
 			this.currentTimer.update(prev => prev - 1);
 

@@ -1,0 +1,14 @@
+.countdown-circle {
+	width: 2.8em;
+	height: 2.8em;
+	border-radius: 50%;
+	border: 5px solid transparent;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.countdown-number {
+	font-size: 1rem;
+	color: var(--text-color);
+}
