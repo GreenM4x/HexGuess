@@ -13,7 +13,7 @@ export class GameLogicService {
 	};
 
 	private currentTimer: number = 60;
-	private timerInterval: any;
+	private timerInterval: NodeJS.Timeout | undefined;
 
 	private lives: number = 3;
 
