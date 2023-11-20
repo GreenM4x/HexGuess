@@ -1,34 +1,35 @@
 .btn {
-  border: none;
-  background-color: var(--secondary-color);
-  transition: background-color ease-in-out 100ms;
-  width: calc(45vw - 10px);
-  aspect-ratio: 3/1;
+	border: none;
+	background-color: var(--secondary-color);
+	transition: background-color ease-in-out 100ms;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-  .option {
-    margin: 0;
-    color: var(--text-color);
-    font-size: large;
-    text-transform: uppercase;
-  }
-  span {
-    color: var(--primary-color);
-  }
+	width: 100%;
+	height: 100%;
 
-  &:active {
-    background-color: #212d4067;
-  }
+	.option {
+		margin: 0;
+		color: var(--text-color);
+		font-size: large;
+		text-transform: uppercase;
+	}
+	span {
+		color: var(--primary-color);
+	}
+
+	&:active {
+		background-color: #212d4067;
+	}
 }
 
 .right {
-  background-color: #266e22;
-  transition: background-color ease-in-out 100ms;
+	background-color: #266e22;
+	transition: background-color ease-in-out 100ms;
 }
 .wrong {
-  background-color: #6e2222;
-  transition: background-color ease-in-out 100ms;
+	background-color: #6e2222;
+	transition: background-color ease-in-out 100ms;
 }

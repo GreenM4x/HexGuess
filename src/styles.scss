@@ -1,26 +1,27 @@
-@import url("https://fonts.googleapis.com/css2?family=Fira+Code&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
 
 :root {
-  --background-color: #11151c;
-  --secondary-color: #212d40;
-  --primary-color: #5a78ab;
-  --text-color: #ffffff;
+	--background-color: #11151c;
+	--secondary-color: #212d40;
+	--primary-color: #5a78ab;
+	--text-color: #ffffff;
+	--header-height: 6rem;
 }
 
 * {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 body {
-  background-color: var(--background-color);
+	background-color: var(--background-color);
 }
 
 .fira {
-  font-family: "Fira Code", monospace;
+	font-family: 'Fira Code', monospace;
 }

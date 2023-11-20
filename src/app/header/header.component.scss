@@ -1,8 +1,9 @@
 .header {
-	margin-top: 2em;
-	position: absolute;
-	text-align: center;
 	width: 100vw;
+	height: 6rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	color: var(--text-color);
 	span {
 		color: var(--primary-color);
