@@ -1,0 +1,45 @@
+h2,
+div {
+	color: white;
+}
+
+.login-container {
+	max-width: 300px;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+	margin-bottom: 15px;
+}
+
+label {
+	display: block;
+	font-weight: bold;
+}
+
+input {
+	width: 100%;
+	padding: 8px;
+	margin-top: 5px;
+	box-sizing: border-box;
+}
+
+button {
+	width: 100%;
+	padding: 10px 15px;
+	margin-top: 10px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	background-color: #4caf50;
+	color: white;
+}
+
+/* Style for the buttons */
+button:nth-child(n + 2) {
+	background-color: #4285f4;
+}

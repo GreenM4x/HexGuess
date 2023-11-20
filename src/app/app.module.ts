@@ -14,6 +14,7 @@ import { TimerComponent } from './game-board/game-components/timer/timer.compone
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 
 @NgModule({
 	declarations: [
@@ -36,6 +37,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 		}),
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFirestoreModule,
+		AngularFireAuthModule,
 	],
 	providers: [],
 	bootstrap: [AppComponent],
