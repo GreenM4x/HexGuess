@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -8,6 +8,7 @@ import { HeaderComponent } from './header/header.component';
 import { ButtonComponent } from './game-board/game-components/button/button.component';
 import { HeartComponent } from './game-board/game-components/heart/heart.component';
 import { ScoreComponent } from './game-board/game-components/score/score.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,13 @@ import { ScoreComponent } from './game-board/game-components/score/score.compone
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerImmediately'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
