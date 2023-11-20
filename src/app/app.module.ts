@@ -11,6 +11,10 @@ import { ScoreComponent } from './game-board/game-components/score/score.compone
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { TimerComponent } from './game-board/game-components/timer/timer.component';
 
+import { environment } from 'src/environments/environment';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -30,6 +34,8 @@ import { TimerComponent } from './game-board/game-components/timer/timer.compone
 			// or after 30 seconds (whichever comes first).
 			registrationStrategy: 'registerImmediately',
 		}),
+		AngularFireModule.initializeApp(environment.firebase),
+		AngularFirestoreModule,
 	],
 	providers: [],
 	bootstrap: [AppComponent],
