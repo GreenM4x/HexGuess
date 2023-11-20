@@ -5,7 +5,7 @@ import {
 	AngularFireAuth,
 	AngularFireAuthModule,
 } from '@angular/fire/compat/auth';
-import { GoogleAuthProvider } from '@angular/fire/auth';
+import { GoogleAuthProvider, GithubAuthProvider } from '@angular/fire/auth';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -53,6 +53,17 @@ export class LoginComponent implements OnInit {
 
 	signInWithGoogle() {
 		this.angularAuthService.signInWithPopup(new GoogleAuthProvider()).then(
+			() => {
+				this.router.navigate(['']);
+			},
+			err => {
+				alert(err.message);
+			}
+		);
+	}
+
+	signInWithGitHub() {
+		this.angularAuthService.signInWithPopup(new GithubAuthProvider()).then(
 			() => {
 				this.router.navigate(['']);
 			},
