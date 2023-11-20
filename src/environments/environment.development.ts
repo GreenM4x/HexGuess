@@ -1,7 +1,7 @@
 export const environment = {
 	production: false,
 	firebase: {
-		apiKey: process.env['FIREBASE_API_KEY'],
+		apiKey: 'AIzaSyDItwHc3Vmx5EgG3RIdDLeMHCdHiL1xZ_4',
 		authDomain: 'hexguess.firebaseapp.com',
 		projectId: 'hexguess',
 		storageBucket: 'hexguess.appspot.com',
