@@ -1,10 +1,9 @@
 <div
-  class="btn fira"
-  [ngClass]="{
-    right: isRight === 'right',
-    wrong: isRight === 'wrong'
-  }"
-  (click)="btnPressed()"
->
-  <p class="option"><span>#</span>{{ option }}</p>
+	class="btn fira"
+	[ngClass]="{
+		right: isRight === 'right',
+		wrong: isRight === 'wrong'
+	}"
+	(click)="btnPressed()">
+	<p class="option"><span>#</span>{{ option }}</p>
 </div>

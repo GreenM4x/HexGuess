@@ -1,25 +1,23 @@
 <div class="container">
-  <div class="game-container">
-    <div class="score">
-      <app-score></app-score>
-    </div>
-    <div class="hearts">
-      <app-heart *ngFor="let i of lives" [isDead]="i"></app-heart>
-    </div>
-    <div class="ctg-container">
-      <div
-        class="color-to-guess"
-        [ngStyle]="{
-      '--color-to-guess': '#' + gameBoard.colorToGuess,
-    }"
-      ></div>
-    </div>
-    <div class="btn-container">
-      <app-button
-        (btnClicked)="checkForWin($event)"
-        *ngFor="let i of gameBoard.optionsArr"
-        [option]="i"
-      ></app-button>
-    </div>
-  </div>
+	<div class="game-container">
+		<div class="score">
+			<app-score></app-score>
+		</div>
+		<div class="hearts">
+			<app-heart *ngFor="let i of lives" [isDead]="i"></app-heart>
+		</div>
+		<div class="ctg-container">
+			<div
+				class="color-to-guess"
+				[ngStyle]="{
+					'--color-to-guess': '#' + gameBoard.colorToGuess
+				}"></div>
+		</div>
+		<div class="btn-container">
+			<app-button
+				(btnClicked)="checkForWin($event)"
+				*ngFor="let i of gameBoard.optionsArr"
+				[option]="i"></app-button>
+		</div>
+	</div>
 </div>
