@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class GameLogicService {
-  constructor() {}
+  constructor() { }
 
   private gameObj: { colorToGuess: string; optionsArr: string[] } = {
     colorToGuess: '000000',
@@ -13,6 +13,7 @@ export class GameLogicService {
   };
 
   private currentTimer: number = 60;
+  private timerInterval: any;
 
   private lives: number = 3;
 
@@ -24,12 +25,12 @@ export class GameLogicService {
 
   public score: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-  SetBoard(): { colorToGuess: string; optionsArr: string[] } {
+  setBoard(): { colorToGuess: string; optionsArr: string[] } {
     let indeces = [1, 2, 3, 4];
-    indeces = this.ShuffleArray(indeces);
+    indeces = this.shuffleArray(indeces);
 
     this.gameObj.optionsArr.forEach((_, i) => {
-      this.gameObj.optionsArr[i] = this.GenerateRandomHex();
+      this.gameObj.optionsArr[i] = this.generateRandomHex();
     });
 
     switch (indeces[0]) {
@@ -46,16 +47,17 @@ export class GameLogicService {
         this.gameObj.colorToGuess = this.gameObj.optionsArr[3];
         break;
       default:
-        this.gameObj.colorToGuess = this.GenerateRandomHex();
+        this.gameObj.colorToGuess = this.generateRandomHex();
         break;
     }
 
-    /* this.CountdownTimer(); */
+    this.resetCountdownTimer();
+    this.startCountdownTimer();
 
     return this.gameObj;
   }
 
-  ShuffleArray<T>(array: T[]): T[] {
+  shuffleArray<T>(array: T[]): T[] {
     const shuffledArray = [...array];
 
     for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -70,7 +72,7 @@ export class GameLogicService {
     return shuffledArray;
   }
 
-  GenerateRandomHex(): string {
+  generateRandomHex(): string {
     const letters = '0123456789ABCDEF';
     let color = '';
 
@@ -81,11 +83,11 @@ export class GameLogicService {
     return color;
   }
 
-  SetColorToGuess(color: string) {
+  setColorToGuess(color: string) {
     this.gameObj.colorToGuess = color;
   }
 
-  CheckForWin(option: string): boolean {
+  checkForWin(option: string): boolean {
     if (option === this.gameObj.colorToGuess) {
       return true;
     } else {
@@ -93,28 +95,31 @@ export class GameLogicService {
     }
   }
 
-  UpdateScore() {
-    this.score.next(this.currentTimer);
+  updateScore() {
+    this.score.next(this.score.value + this.currentTimer);
   }
 
-  UpdateLifes() {
+  updateLifes() {
     const currentValue = this.livesArr.getValue();
     currentValue[this.lives - 1] = true;
     this.lives--;
     this.livesArr.next(currentValue);
   }
 
-  CountdownTimer() {
+  startCountdownTimer() {
     this.currentTimer = 60;
-    const timer = setInterval(() => {
+    this.timerInterval = setInterval(() => {
       this.currentTimer--;
-      console.log(`Remaining time: ${this.currentTimer} seconds`);
 
       if (this.currentTimer === 0) {
-        clearInterval(timer);
-        this.UpdateLifes();
-        this.SetBoard();
+        this.resetCountdownTimer();
+        this.updateLifes();
+        this.setBoard();
       }
     }, 1000);
+  }
+
+  private resetCountdownTimer() {
+    clearInterval(this.timerInterval);
   }
 }
