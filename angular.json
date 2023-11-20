@@ -65,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "HexGuess:build:production"
+              "buildTarget": "HexGuess:build:production"
             },
             "development": {
-              "browserTarget": "HexGuess:build:development"
+              "buildTarget": "HexGuess:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "HexGuess:build"
+            "buildTarget": "HexGuess:build"
           }
         },
         "test": {
