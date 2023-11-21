@@ -1,5 +1,5 @@
 <app-timer class="timer"></app-timer>
-<div class="container">
+<div class="container" [class.game-over]="isGameOver">
 	<div class="game-container">
 		<div class="state">
 			<div class="score">
@@ -16,11 +16,18 @@
 					'--color-to-guess': '#' + gameBoard.colorToGuess
 				}"></div>
 		</div>
-		<div class="btn-container">
+		<div class="btn-container" [class.disable-input]="roundEnd">
 			<app-button
 				(btnClicked)="checkForWin($event)"
 				*ngFor="let i of gameBoard.optionsArr"
 				[option]="i"></app-button>
+		</div>
+	</div>
+	<div class="game-over-container fira" *ngIf="isGameOver">
+		<div class="game-over-msg">
+			<h1>Game Over</h1>
+			<h2>Score: {{ glService.score | async }}</h2>
+			<button class="game-btn fira" (click)="restartGame()">Restart</button>
 		</div>
 	</div>
 </div>

@@ -5,13 +5,12 @@ import { BehaviorSubject } from 'rxjs';
 	providedIn: 'root',
 })
 export class GameLogicService {
-	public livesArr: BehaviorSubject<boolean[]> = new BehaviorSubject<boolean[]>([
-		false,
-		false,
-		false,
-	]);
-	public score: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 	public readonly INITIAL_TIMER_VALUE = 60;
+	public readonly INITIAL_LIVES_VALUE = 3;
+	public livesCount: BehaviorSubject<number> = new BehaviorSubject<number>(
+		this.INITIAL_LIVES_VALUE
+	);
+	public score: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
 	private gameObj: { colorToGuess: string; optionsArr: string[] } = {
 		colorToGuess: '000000',
@@ -19,7 +18,6 @@ export class GameLogicService {
 	};
 	private currentTimer = signal(this.INITIAL_TIMER_VALUE);
 	private timerInterval: ReturnType<typeof setTimeout> | undefined;
-	private lives: number = 3;
 
 	public get getTimer(): number {
 		return this.currentTimer();
@@ -65,11 +63,10 @@ export class GameLogicService {
 		this.score.next(this.score.value + this.currentTimer());
 	}
 
-	updateLifes() {
-		const currentValue = this.livesArr.getValue();
-		currentValue[this.lives - 1] = true;
-		this.lives--;
-		this.livesArr.next(currentValue);
+	reduceLifes() {
+		if (this.livesCount.value > 0) {
+			this.livesCount.next(this.livesCount.value - 1);
+		}
 	}
 
 	startCountdownTimer() {
@@ -79,13 +76,28 @@ export class GameLogicService {
 
 			if (this.currentTimer() === 0) {
 				this.resetCountdownTimer();
-				this.updateLifes();
+				this.reduceLifes();
 				this.setBoard();
 			}
 		}, 1000);
 	}
 
-	private resetCountdownTimer() {
+	resetGame() {
+		this.resetCountdownTimer();
+		this.resetScore();
+		this.resetLifes();
+		this.setBoard();
+	}
+
+	public resetCountdownTimer() {
 		clearInterval(this.timerInterval);
+	}
+
+	private resetScore() {
+		this.score.next(0);
+	}
+
+	private resetLifes() {
+		this.livesCount.next(this.INITIAL_LIVES_VALUE);
 	}
 }

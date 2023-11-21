@@ -7,27 +7,45 @@ import { GameLogicService } from '../services/game-logic.service';
 	styleUrls: ['./game-board.component.scss'],
 })
 export class GameBoardComponent implements OnInit {
-	constructor(private glService: GameLogicService) {}
+	isGameOver: boolean;
+	lives: boolean[];
+	score: number;
+	roundEnd: boolean;
+	gameBoard: { colorToGuess: string; optionsArr: string[] };
 
-	lives!: boolean[];
-	score!: number;
+	constructor(public glService: GameLogicService) {}
 
-	gameBoard!: { colorToGuess: string; optionsArr: string[] };
 	ngOnInit(): void {
 		this.gameBoard = this.glService.setBoard();
-		this.glService.livesArr.subscribe(Arr => {
-			this.lives = Arr;
+		this.glService.livesCount.subscribe(lives => {
+			const startingLives = this.glService.INITIAL_LIVES_VALUE;
+			this.lives = Array(startingLives)
+				.fill(false)
+				.map((life, index) => index >= lives);
 		});
 	}
 
 	checkForWin(color: string) {
+		this.roundEnd = true;
 		if (this.glService.isCorrectGuess(color)) {
 			this.glService.updateScore();
 			setTimeout(() => {
 				this.gameBoard = this.glService.setBoard();
+				this.roundEnd = false;
 			}, 1000);
 		} else {
-			this.glService.updateLifes();
+			this.glService.reduceLifes();
+			this.roundEnd = false;
+			if (!this.lives.includes(false)) {
+				this.glService.resetCountdownTimer();
+				this.isGameOver = true;
+			}
 		}
+	}
+
+	restartGame() {
+		this.isGameOver = false;
+		this.glService.resetGame();
+		this.gameBoard = this.glService.setBoard();
 	}
 }
