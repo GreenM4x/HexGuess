@@ -4,6 +4,7 @@
 		right: isCorrect === true,
 		wrong: isCorrect === false
 	}"
+	[disabled]="isCorrect !== undefined"
 	(click)="btnPressed($event)">
 	<p class="option"><span>#</span>{{ option }}</p>
 	<div
