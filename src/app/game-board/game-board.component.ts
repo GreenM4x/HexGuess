@@ -21,7 +21,7 @@ export class GameBoardComponent implements OnInit {
 	}
 
 	checkForWin(color: string) {
-		if (this.glService.checkForWin(color)) {
+		if (this.glService.isCorrectGuess(color)) {
 			this.glService.updateScore();
 			setTimeout(() => {
 				this.gameBoard = this.glService.setBoard();

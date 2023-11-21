@@ -1,4 +1,5 @@
 .btn {
+	position: relative;
 	border: none;
 	background-color: var(--secondary-color);
 	transition: background-color ease-in-out 100ms;
@@ -11,6 +12,7 @@
 	height: 100%;
 
 	.option {
+		pointer-events: none;
 		margin: 0;
 		color: var(--text-color);
 		font-size: large;
@@ -32,4 +34,28 @@
 .wrong {
 	background-color: #6e2222;
 	transition: background-color ease-in-out 100ms;
+}
+
+#floatNumber {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.3s;
+	color: var(--text-color);
+	font-size: 1.5rem;
+	&.show {
+		animation: floatUp 1s ease-out;
+		opacity: 1;
+	}
+
+	@keyframes floatUp {
+		0% {
+			transform: translateY(0);
+			opacity: 0.7;
+		}
+		100% {
+			transform: translateY(-20px);
+			opacity: 0;
+		}
+	}
 }

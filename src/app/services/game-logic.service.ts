@@ -89,12 +89,8 @@ export class GameLogicService {
 		this.gameObj.colorToGuess = color;
 	}
 
-	checkForWin(option: string): boolean {
-		if (option === this.gameObj.colorToGuess) {
-			return true;
-		} else {
-			return false;
-		}
+	isCorrectGuess(option: string): boolean {
+		return option === this.gameObj.colorToGuess;
 	}
 
 	updateScore() {

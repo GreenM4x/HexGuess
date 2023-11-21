@@ -1,9 +1,16 @@
 <button
 	class="btn fira"
 	[ngClass]="{
-		right: isRight === 'right',
-		wrong: isRight === 'wrong'
+		right: isCorrect === true,
+		wrong: isCorrect === false
 	}"
-	(click)="btnPressed()">
+	(click)="btnPressed($event)">
 	<p class="option"><span>#</span>{{ option }}</p>
+	<div
+		id="floatNumber"
+		[class.show]="showFloatNumber"
+		[style.left.px]="floatPosX"
+		[style.top.px]="floatPosY">
+		{{ floatText }}
+	</div>
 </button>
