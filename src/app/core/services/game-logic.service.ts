@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { BoardType } from '@shared/models/BoardType';
 
 @Injectable({
 	providedIn: 'root',
@@ -7,14 +8,15 @@ import { BehaviorSubject } from 'rxjs';
 export class GameLogicService {
 	public readonly INITIAL_TIMER_VALUE = 60;
 	public readonly INITIAL_LIVES_VALUE = 3;
+	public readonly INITIAL_OPTIONS_AMOUNT = 4;
 	public livesCount: BehaviorSubject<number> = new BehaviorSubject<number>(
 		this.INITIAL_LIVES_VALUE
 	);
 	public score: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-	private gameObj: { colorToGuess: string; optionsArr: string[] } = {
+	private gameObj: BoardType = {
 		colorToGuess: '000000',
-		optionsArr: Array(4).fill('000000'),
+		optionsArr: Array(this.INITIAL_OPTIONS_AMOUNT).fill('000000'),
 	};
 	private currentTimer = signal(this.INITIAL_TIMER_VALUE);
 	private timerInterval: ReturnType<typeof setTimeout> | undefined;
@@ -25,7 +27,7 @@ export class GameLogicService {
 
 	constructor() {}
 
-	setBoard(): { colorToGuess: string; optionsArr: string[] } {
+	setBoard(): BoardType {
 		this.gameObj.optionsArr = this.gameObj.optionsArr.map(() =>
 			this.generateRandomHex()
 		);
