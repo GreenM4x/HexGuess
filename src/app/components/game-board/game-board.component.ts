@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { GameLogicService } from '../services/game-logic.service';
+import { GameLogicService } from '@services/game-logic.service';
+import { BoardType } from '@shared/models/BoardType';
 
 @Component({
 	selector: 'app-game-board',
@@ -11,7 +12,7 @@ export class GameBoardComponent implements OnInit {
 	lives: boolean[];
 	score: number;
 	roundEnd: boolean;
-	gameBoard: { colorToGuess: string; optionsArr: string[] };
+	gameBoard: BoardType;
 
 	constructor(public glService: GameLogicService) {}
 

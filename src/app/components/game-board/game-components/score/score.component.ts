@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GameLogicService } from 'src/app/services/game-logic.service';
+import { GameLogicService } from '@services/game-logic.service';
 
 @Component({
 	selector: 'app-score',

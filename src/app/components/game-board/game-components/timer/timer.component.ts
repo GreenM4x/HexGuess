@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, ElementRef, Renderer2 } from '@angular/core';
-import { GameLogicService } from '../../../services/game-logic.service';
+import { GameLogicService } from '@services/game-logic.service';
 
 @Component({
 	selector: 'app-timer',

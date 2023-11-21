@@ -5,8 +5,8 @@ import {
 	redirectUnauthorizedTo,
 } from '@angular/fire/compat/auth-guard';
 
-import { LoginComponent } from './login/login.component';
-import { GameBoardComponent } from './game-board/game-board.component';
+import { LoginComponent } from './components/login/login.component';
+import { GameBoardComponent } from './components/game-board/game-board.component';
 
 const redirectToLogin = () => redirectUnauthorizedTo(['auth']);
 const routes: Routes = [
