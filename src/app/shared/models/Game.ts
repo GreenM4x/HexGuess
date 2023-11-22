@@ -62,9 +62,12 @@ export class Game {
 		this.time.set(this.config.time.count);
 		this.timerInterval = setInterval(() => {
 			this.time.update(prev => prev - 1);
-
 			if (this.time() <= 0) {
 				this.descreaseLivesBy(1);
+				if (this.lives() > 0) {
+					this.restartTimer();
+				}
+				return;
 			}
 		}, 1000);
 	}
