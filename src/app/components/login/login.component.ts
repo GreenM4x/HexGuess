@@ -1,27 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import {
-	AngularFireAuth,
-	AngularFireAuthModule,
-} from '@angular/fire/compat/auth';
-import { GoogleAuthProvider, GithubAuthProvider } from '@angular/fire/auth';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FirebaseService } from '@core/services/firebase.service';
 
 @Component({
 	selector: 'app-login',
 	standalone: true,
-	imports: [CommonModule, AngularFireAuthModule, ReactiveFormsModule],
+	imports: [CommonModule, ReactiveFormsModule],
 	templateUrl: './login.component.html',
 	styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
 	loginForm!: FormGroup;
 	constructor(
-		private angularAuthService: AngularFireAuth,
 		private formBuilder: FormBuilder,
-		private router: Router
+		private fbService: FirebaseService
 	) {}
 
 	ngOnInit() {
@@ -33,43 +27,21 @@ export class LoginComponent implements OnInit {
 
 	onSubmit() {
 		if (this.loginForm.valid) {
-			this.angularAuthService
-				.signInWithEmailAndPassword(
-					this.loginForm.get('username').value,
-					this.loginForm.get('password').value
-				)
-				.then(() => this.router.navigate(['']))
-				.catch(err => {
-					console.log(err);
-				});
-			console.log('Form submitted with values:', this.loginForm.value);
+			this.signInWithEmail();
+
 		}
 	}
 
 	signInWithEmail() {
-		// Add logic for signing in with email
+		this.fbService.signInWithEmail(this.loginForm.get('username').value, this.loginForm.get('password').value)
 		console.log('Signing in with email...');
 	}
 
 	signInWithGoogle() {
-		this.angularAuthService.signInWithPopup(new GoogleAuthProvider()).then(
-			() => {
-				this.router.navigate(['']);
-			},
-			err => {
-				alert(err.message);
-			}
-		);
+		this.fbService.signInWithGoogle();
 	}
 
 	signInWithGitHub() {
-		this.angularAuthService.signInWithPopup(new GithubAuthProvider()).then(
-			() => {
-				this.router.navigate(['']);
-			},
-			err => {
-				alert(err.message);
-			}
-		);
+		this.fbService.signInWithGitHub();
 	}
 }
