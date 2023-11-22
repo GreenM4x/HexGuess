@@ -9,13 +9,17 @@ import { ScoreComponent } from './components/game-board/game-components/score/sc
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { TimerComponent } from './components/game-board/game-components/timer/timer.component';
 import { environment } from 'src/environments/environment';
+
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireAnalyticsModule} from '@angular/fire/compat/analytics';
+
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
 
 @NgModule({
 	declarations: [
@@ -36,6 +40,7 @@ import { CommonModule } from '@angular/common';
 		}),
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFirestoreModule,
+		AngularFireAnalyticsModule,
 		AngularFireAuthModule,
 		FormsModule,
 		CommonModule,
