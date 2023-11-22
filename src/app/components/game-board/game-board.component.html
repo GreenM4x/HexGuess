@@ -6,27 +6,27 @@
 				<app-score></app-score>
 			</div>
 			<div class="hearts">
-				<app-heart *ngFor="let i of lives" [isDead]="i"></app-heart>
+				<app-heart *ngFor="let i of lives()" [isDead]="i"></app-heart>
 			</div>
 		</div>
 		<div class="ctg-container">
 			<div
 				class="color-to-guess"
 				[ngStyle]="{
-					'--color-to-guess': '#' + gameBoard.colorToGuess
+					'--color-to-guess': '#' + colorToGuess
 				}"></div>
 		</div>
-		<div class="btn-container" [class.disable-input]="roundEnd">
+		<div class="btn-container">
 			<app-button
-				(btnClicked)="checkForWin($event)"
-				*ngFor="let i of gameBoard.optionsArr"
+				(btnClicked)="processGuess($event)"
+				*ngFor="let i of options"
 				[option]="i"></app-button>
 		</div>
 	</div>
 	<div class="game-over-container fira" *ngIf="isGameOver">
 		<div class="game-over-msg">
 			<h1>Game Over</h1>
-			<h2>Score: {{ glService.score | async }}</h2>
+			<h2>Score: {{ score }}</h2>
 			<button class="game-btn fira" (click)="restartGame()">Restart</button>
 		</div>
 	</div>

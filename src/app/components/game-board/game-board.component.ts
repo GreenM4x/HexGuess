@@ -1,52 +1,58 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Signal, computed } from '@angular/core';
 import { GameLogicService } from '@services/game-logic.service';
-import { BoardType } from '@shared/models/BoardType';
+import { GameStateService } from '@core/services/game-state.service';
+import { GameConfigurationService } from '@core/services/game-configuration.service';
 
 @Component({
 	selector: 'app-game-board',
 	templateUrl: './game-board.component.html',
 	styleUrls: ['./game-board.component.scss'],
 })
-export class GameBoardComponent implements OnInit {
-	isGameOver: boolean;
-	lives: boolean[];
-	score: number;
-	roundEnd: boolean;
-	gameBoard: BoardType;
+export class GameBoardComponent {
+	public gameState: 'playing' | 'game-over' | 'game-won';
+	public lives: Signal<boolean[]> = computed(() => this.updateLivesArray());
 
-	constructor(public glService: GameLogicService) {}
+	public get isGameOver() {
+		return this.gameStateSerivce.getGameState() === 'game-over';
+	}
 
-	ngOnInit(): void {
-		this.gameBoard = this.glService.setBoard();
-		this.glService.livesCount.subscribe(lives => {
-			const startingLives = this.glService.INITIAL_LIVES_VALUE;
-			this.lives = Array(startingLives)
-				.fill(false)
-				.map((life, index) => index >= lives);
+	public get options() {
+		return this.gameStateSerivce.getCurrentRound().options;
+	}
+
+	public get colorToGuess() {
+		return this.gameStateSerivce.getCurrentRound().colorToGuess;
+	}
+
+	public get score() {
+		return this.gameStateSerivce.getScore();
+	}
+
+	constructor(
+		private gameLogicService: GameLogicService,
+		public gameStateSerivce: GameStateService,
+		private gameConfigService: GameConfigurationService
+	) {
+		this.gameStateSerivce.startNewGame();
+	}
+
+	public processGuess(color: string) {
+		this.gameLogicService.processGuess({
+			hexGuess: color,
+			score: this.gameStateSerivce.getTimer(),
 		});
 	}
 
-	checkForWin(color: string) {
-		this.roundEnd = true;
-		if (this.glService.isCorrectGuess(color)) {
-			this.glService.updateScore();
-			setTimeout(() => {
-				this.gameBoard = this.glService.setBoard();
-				this.roundEnd = false;
-			}, 1000);
-		} else {
-			this.glService.reduceLifes();
-			this.roundEnd = false;
-			if (!this.lives.includes(false)) {
-				this.glService.resetCountdownTimer();
-				this.isGameOver = true;
-			}
-		}
+	public restartGame() {
+		this.gameStateSerivce.startNewGame();
+		this.updateLivesArray();
 	}
 
-	restartGame() {
-		this.isGameOver = false;
-		this.glService.resetGame();
-		this.gameBoard = this.glService.setBoard();
+	private updateLivesArray() {
+		const startingLives = this.gameConfigService.getGameConfig().lives.count;
+		const lives = this.gameStateSerivce.getCurrentGame().lives();
+		return Array(startingLives)
+			.fill(false)
+			.map((life, index) => index >= lives);
 	}
 }

@@ -8,20 +8,18 @@ import { Observable } from 'rxjs';
 	templateUrl: './header.component.html',
 	styleUrls: ['./header.component.scss'],
 	standalone: true,
-	imports: [CommonModule]
+	imports: [CommonModule],
 })
 export class HeaderComponent implements OnInit {
-	isLoggedIn: Observable<boolean> = new Observable<boolean>;
+	isLoggedIn: Observable<boolean> = new Observable<boolean>();
 
-	constructor(private fbService: FirebaseService){}
+	constructor(private fbService: FirebaseService) {}
 
 	ngOnInit(): void {
-		this.isLoggedIn = this.fbService.isLoggedIn()
+		this.isLoggedIn = this.fbService.isLoggedIn();
 	}
 
 	logout() {
 		this.fbService.logout();
-	  }
-
-
+	}
 }
