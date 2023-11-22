@@ -1,5 +1,8 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { Analytics } from '@vercel/analytics/react';
+
+import { inject } from '@vercel/analytics';
+ 
+inject();
 
 import { AppModule } from './app/app.module';
 
