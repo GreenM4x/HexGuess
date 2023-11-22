@@ -14,6 +14,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from '@shared/components/header/header.component';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
 	declarations: [
@@ -35,6 +37,8 @@ import { HeaderComponent } from '@shared/components/header/header.component';
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFirestoreModule,
 		AngularFireAuthModule,
+		FormsModule,
+		CommonModule,
 	],
 	providers: [],
 	bootstrap: [AppComponent],
