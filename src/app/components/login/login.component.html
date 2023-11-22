@@ -1,5 +1,5 @@
-<div class="login-container">
-	<h2>Login</h2>
+<div class="login-container fira">
+	<h2><span>LOG</span>IN</h2>
 	<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 		<div class="form-group">
 			<label for="username">Username:</label>
@@ -25,18 +25,17 @@
 			</div>
 		</div>
 
-		<button type="submit" [disabled]="loginForm.invalid">Login</button>
-
-		<button type="button" (click)="signInWithEmail()">
-			Sign in with Email
-		</button>
-
-		<!-- Button for signing in with Google -->
-		<button type="button" (click)="signInWithGoogle()">
-			Sign in with Google
-		</button>
-		<button type="button" (click)="signInWithGitHub()">
-			Sign in with GitHub
-		</button>
+		<div class="btn-container">
+			<button class="fira" type="submit" [disabled]="loginForm.invalid">Login</button>
+			<button class="fira" type="button" (click)="signInWithEmail()">
+				Sign in with Email
+			</button>
+			<button class="fira" type="button" (click)="signInWithGoogle()">
+				Sign in with Google
+			</button>
+			<button class="fira" type="button" (click)="signInWithGitHub()">
+				Sign in with GitHub
+			</button>
+		</div>
 	</form>
 </div>

@@ -1,13 +1,13 @@
 h2,
 div {
-	color: white;
+	color: var(--text-color);
 }
 
 .login-container {
 	max-width: 300px;
 	margin: auto;
 	padding: 20px;
-	border: 1px solid #ccc;
+	border: 5px solid var(--secondary-color);
 	border-radius: 5px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -35,11 +35,16 @@ button {
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
-	background-color: #4caf50;
-	color: white;
+	background-color: var(--primary-color);
+	color: var(--text-color);
+
+	&:disabled {
+		background-color: var(--secondary-color);
+		cursor: default;
+	}
 }
 
 /* Style for the buttons */
 button:nth-child(n + 2) {
-	background-color: #4285f4;
+	background-color: var(--primary-color);
 }
