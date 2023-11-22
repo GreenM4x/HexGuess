@@ -29,7 +29,7 @@ export class ButtonComponent {
 
 	private displayPoints(event: MouseEvent) {
 		this.showFloatNumber = true;
-		this.floatText = `+${this.gameStateService.getTimer}`;
+		this.floatText = `+${this.gameStateService.getTimer()}`;
 		this.floatPosX = event.offsetX;
 		this.floatPosY = event.offsetY + -30;
 		setTimeout(() => {

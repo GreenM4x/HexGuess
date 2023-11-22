@@ -9,23 +9,14 @@ import { GameConfigurationService } from '@core/services/game-configuration.serv
 	styleUrls: ['./game-board.component.scss'],
 })
 export class GameBoardComponent {
-	public gameState: 'playing' | 'game-over' | 'game-won';
 	public lives: Signal<boolean[]> = computed(() => this.updateLivesArray());
 
 	public get isGameOver() {
 		return this.gameStateSerivce.getGameState() === 'game-over';
 	}
 
-	public get options() {
-		return this.gameStateSerivce.getCurrentRound().options;
-	}
-
-	public get colorToGuess() {
-		return this.gameStateSerivce.getCurrentRound().colorToGuess;
-	}
-
-	public get score() {
-		return this.gameStateSerivce.getScore();
+	public get currentRound() {
+		return this.gameStateSerivce.getCurrentRound();
 	}
 
 	constructor(
@@ -45,12 +36,11 @@ export class GameBoardComponent {
 
 	public restartGame() {
 		this.gameStateSerivce.startNewGame();
-		this.updateLivesArray();
 	}
 
 	private updateLivesArray() {
 		const startingLives = this.gameConfigService.getGameConfig().lives.count;
-		const lives = this.gameStateSerivce.getCurrentGame().lives();
+		const lives = this.gameStateSerivce.getLivesCount();
 		return Array(startingLives)
 			.fill(false)
 			.map((life, index) => index >= lives);

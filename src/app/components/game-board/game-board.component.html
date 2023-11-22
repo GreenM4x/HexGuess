@@ -13,20 +13,20 @@
 			<div
 				class="color-to-guess"
 				[ngStyle]="{
-					'--color-to-guess': '#' + colorToGuess
+					'--color-to-guess': '#' + currentRound.colorToGuess
 				}"></div>
 		</div>
 		<div class="btn-container">
 			<app-button
 				(btnClicked)="processGuess($event)"
-				*ngFor="let i of options"
+				*ngFor="let i of currentRound.options"
 				[option]="i"></app-button>
 		</div>
 	</div>
 	<div class="game-over-container fira" *ngIf="isGameOver">
 		<div class="game-over-msg">
 			<h1>Game Over</h1>
-			<h2>Score: {{ score }}</h2>
+			<h2>Score: {{ gameStateSerivce.getScore() }}</h2>
 			<button class="game-btn fira" (click)="restartGame()">Restart</button>
 		</div>
 	</div>

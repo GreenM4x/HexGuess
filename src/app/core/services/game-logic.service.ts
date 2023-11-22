@@ -14,11 +14,16 @@ export class GameLogicService {
 	processGuess(guess: { score: number; hexGuess: string }) {
 		if (this.isCorrectGuess(guess.hexGuess)) {
 			this.gameState.getCurrentRound().updateGuesses(guess.hexGuess);
-			this.gameState.getCurrentGame().increaseScore(guess.score);
-			this.gameState.startNewRound();
+			this.gameState.getCurrentGame.increaseScore(guess.score);
+
+			if (this.gameState.getCurrentGame.gameState() === 'playing') {
+				setTimeout(() => {
+					this.gameState.startNewRound();
+				}, 1000);
+			}
 		} else {
 			this.gameState.getCurrentRound().updateGuesses(guess.hexGuess);
-			this.gameState.getCurrentGame().descreaseLivesBy(1);
+			this.gameState.getCurrentGame.descreaseLivesBy(1);
 		}
 	}
 }
