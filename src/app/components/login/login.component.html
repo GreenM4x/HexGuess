@@ -26,7 +26,7 @@
 				loginForm.get('password').hasError('required') &&
 				loginForm.get('password').touched
 			) {
-				<div>Password is required.</div>
+				<div>{{ pwError }}</div>
 			}
 		</div>
 		<div class="form-group">
@@ -38,14 +38,17 @@
 					</button>
 				</div>
 			} @else {
-				<label for="password">Confirm Password:</label>
-				<input type="password" id="password" formControlName="password" />
+				<label for="repeatPassword">Confirm Password:</label>
+				<input
+					type="password"
+					id="repeatPassword"
+					formControlName="repeatPassword" />
 				<button class="text-btn" (click)="toggleToRegister()">Sign in</button>
 				@if (
-					loginForm.get('password').hasError('required') &&
-					loginForm.get('password').touched
+					loginForm.get('repeatPassword').hasError('required') &&
+					loginForm.get('repeatPassword').touched
 				) {
-					<div>Password is required.</div>
+					<div>{{ pwError }}</div>
 				}
 			}
 		</div>
