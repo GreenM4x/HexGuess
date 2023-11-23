@@ -12,6 +12,7 @@ import { FirebaseService } from '@core/services/firebase.service';
 	styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
+	isRegistered: boolean = true;
 	loginForm!: FormGroup;
 	constructor(
 		private formBuilder: FormBuilder,
@@ -29,6 +30,11 @@ export class LoginComponent implements OnInit {
 		if (this.loginForm.valid) {
 			this.signInWithEmail();
 		}
+	}
+
+	toggleToRegister() {
+		this.isRegistered = !this.isRegistered;
+		console.log(this.isRegistered);
 	}
 
 	signInWithEmail() {

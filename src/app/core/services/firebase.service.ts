@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { GoogleAuthProvider, GithubAuthProvider } from '@angular/fire/auth';
+import {
+	GoogleAuthProvider,
+	GithubAuthProvider,
+	User,
+} from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
 
@@ -8,7 +12,7 @@ import { Observable, map } from 'rxjs';
 	providedIn: 'root',
 })
 export class FirebaseService {
-	user$: Observable<any>;
+	user$: Observable<User>;
 
 	constructor(
 		private angularAuthService: AngularFireAuth,

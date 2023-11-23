@@ -3,6 +3,10 @@ div {
 	color: var(--text-color);
 }
 
+h2 span:nth-child(1) {
+	color: var(--primary-color);
+}
+
 .login-container {
 	max-width: 300px;
 	margin: auto;
@@ -28,7 +32,7 @@ input {
 	box-sizing: border-box;
 }
 
-button {
+.btn {
 	width: 100%;
 	padding: 10px 15px;
 	margin-top: 10px;
@@ -45,6 +49,21 @@ button {
 }
 
 /* Style for the buttons */
-button:nth-child(n + 2) {
+.btn:nth-child(n + 2) {
 	background-color: var(--primary-color);
+}
+
+.new-user {
+	p {
+		font-size: small;
+	}
+}
+
+.text-btn {
+	background-color: transparent;
+	font-weight: bold;
+	color: var(--primary-color);
+	border: none;
+	width: auto;
+	height: auto;
 }

@@ -1,39 +1,66 @@
 <div class="login-container fira">
-	<h2><span>LOG</span>IN</h2>
+	<h2>
+		<span>SIGN</span>
+		@if (isRegistered) {
+			<span>IN</span>
+		} @else {
+			<span>UP</span>
+		}
+	</h2>
 	<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 		<div class="form-group">
 			<label for="username">Username:</label>
 			<input type="text" id="username" formControlName="username" />
-			<div
-				*ngIf="
-					loginForm.get('username').hasError('required') &&
-					loginForm.get('username').touched
-				">
-				Username is required.
-			</div>
+			@if (
+				loginForm.get('username').hasError('required') &&
+				loginForm.get('username').touched
+			) {
+				<div>Username is required.</div>
+			}
 		</div>
 
 		<div class="form-group">
 			<label for="password">Password:</label>
 			<input type="password" id="password" formControlName="password" />
-			<div
-				*ngIf="
+			@if (
+				loginForm.get('password').hasError('required') &&
+				loginForm.get('password').touched
+			) {
+				<div>Password is required.</div>
+			}
+		</div>
+		<div class="form-group">
+			@if (isRegistered) {
+				<div class="new-user">
+					<p>Don't habe an account yet?</p>
+					<button class="text-btn" (click)="toggleToRegister()">
+						Register
+					</button>
+				</div>
+			} @else {
+				<label for="password">Confirm Password:</label>
+				<input type="password" id="password" formControlName="password" />
+				<button class="text-btn" (click)="toggleToRegister()">Sign in</button>
+				@if (
 					loginForm.get('password').hasError('required') &&
 					loginForm.get('password').touched
-				">
-				Password is required.
-			</div>
+				) {
+					<div>Password is required.</div>
+				}
+			}
 		</div>
-
 		<div class="btn-container">
-			<button class="fira" type="submit" [disabled]="loginForm.invalid">Login</button>
-			<button class="fira" type="button" (click)="signInWithEmail()">
-				Sign in with Email
+			<button class="fira btn" type="submit" [disabled]="loginForm.invalid">
+				@if (isRegistered) {
+					Login
+				} @else {
+					SignUp
+				}
 			</button>
-			<button class="fira" type="button" (click)="signInWithGoogle()">
+			<button class="fira btn" type="button" (click)="signInWithGoogle()">
 				Sign in with Google
 			</button>
-			<button class="fira" type="button" (click)="signInWithGitHub()">
+			<button class="fira btn" type="button" (click)="signInWithGitHub()">
 				Sign in with GitHub
 			</button>
 		</div>
