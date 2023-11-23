@@ -1,7 +1,6 @@
 import { Component, Signal, computed } from '@angular/core';
 import { GameLogicService } from '@services/game-logic.service';
 import { GameStateService } from '@core/services/game-state.service';
-import { GameConfigurationService } from '@core/services/game-configuration.service';
 
 @Component({
 	selector: 'app-game-board',
@@ -19,10 +18,13 @@ export class GameBoardComponent {
 		return this.gameStateSerivce.getCurrentRound();
 	}
 
+	public get config() {
+		return this.gameStateSerivce.getConfig;
+	}
+
 	constructor(
-		private gameLogicService: GameLogicService,
 		public gameStateSerivce: GameStateService,
-		private gameConfigService: GameConfigurationService
+		private gameLogicService: GameLogicService
 	) {
 		this.gameStateSerivce.startNewGame();
 	}
@@ -39,7 +41,7 @@ export class GameBoardComponent {
 	}
 
 	private updateLivesArray() {
-		const startingLives = this.gameConfigService.getGameConfig().lives.count;
+		const startingLives = this.config.lives.count;
 		const lives = this.gameStateSerivce.getLivesCount();
 		return Array(startingLives)
 			.fill(false)

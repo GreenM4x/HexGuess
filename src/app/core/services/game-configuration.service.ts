@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GameConfigType } from '@shared/models/GameConfigType';
-import { gameModeConfig } from '../config/game.config';
+import { GameModeEnum, gameModeConfig } from '../config/game.config';
 
 @Injectable({
 	providedIn: 'root',
@@ -18,5 +18,9 @@ export class GameConfigurationService {
 
 	public getGameConfig() {
 		return this.currentGameSettings;
+	}
+
+	public getGameConfigByMode(mode: GameModeEnum) {
+		return gameModeConfig[mode];
 	}
 }

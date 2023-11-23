@@ -8,7 +8,7 @@ export const normalGameConfig: GameConfigType = {
 	},
 	time: {
 		enabled: true,
-		count: 60,
+		count: 30,
 	},
 	score: {
 		enabled: true,
@@ -25,6 +25,36 @@ export const normalGameConfig: GameConfigType = {
 	},
 };
 
+export const multiNormalGameConfig: GameConfigType = {
+	lives: {
+		enabled: false,
+		count: 3,
+	},
+	time: {
+		enabled: true,
+		count: 30,
+	},
+	score: {
+		enabled: true,
+		count: 0,
+		pointsTimeRatio: 1,
+	},
+	guess: {
+		mode: 'color', // color | hex
+		responseOptionsCount: 4,
+	},
+	game: {
+		mode: 'turns', // turns | infinite | time(evtl)
+		turns: 10,
+	},
+};
+
 export const gameModeConfig: GameModeType = {
 	normal: normalGameConfig,
+	multiNormal: multiNormalGameConfig,
 };
+
+export enum GameModeEnum {
+	normal = 'normal',
+	multiNormal = 'multiNormal',
+}

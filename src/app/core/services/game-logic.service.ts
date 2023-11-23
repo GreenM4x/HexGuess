@@ -14,7 +14,9 @@ export class GameLogicService {
 	processGuess(guess: { score: number; hexGuess: string }) {
 		if (this.isCorrectGuess(guess.hexGuess)) {
 			this.gameState.getCurrentRound().updateGuesses(guess.hexGuess);
-			this.gameState.getCurrentGame.increaseScore(guess.score);
+			this.gameState.getCurrentGame.increaseScore(
+				guess.score * this.gameState.getConfig.score.pointsTimeRatio
+			);
 
 			if (this.gameState.getCurrentGame.gameState() === 'playing') {
 				setTimeout(() => {
