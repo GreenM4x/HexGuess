@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, ElementRef, Renderer2 } from '@angular/core';
-import { GameLogicService } from '@services/game-logic.service';
+import { GameConfigurationService } from '@core/services/game-configuration.service';
+import { GameStateService } from '@core/services/game-state.service';
 
 @Component({
 	selector: 'app-timer',
@@ -10,12 +11,13 @@ import { GameLogicService } from '@services/game-logic.service';
 	styleUrl: './timer.component.scss',
 })
 export class TimerComponent {
-	public get timer(): number {
-		return this.glService.getTimer;
+	public get timer() {
+		return this.gameStateService.getTimer();
 	}
 
 	constructor(
-		private glService: GameLogicService,
+		private gameConfigurationService: GameConfigurationService,
+		private gameStateService: GameStateService,
 		private el: ElementRef,
 		private renderer: Renderer2
 	) {
@@ -25,7 +27,9 @@ export class TimerComponent {
 	}
 
 	private updateTimerCircle() {
-		const percentage = (this.timer / this.glService.INITIAL_TIMER_VALUE) * 100;
+		const percentage =
+			(this.timer / this.gameConfigurationService.getGameConfig().time.count) *
+			100;
 		const borderColor = percentage <= 25 ? 'red' : 'white';
 		const circle = this.el.nativeElement.querySelector('.countdown-circle');
 		const gradient = `linear-gradient(var(--background-color), var(--background-color)) content-box no-repeat,

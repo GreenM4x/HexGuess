@@ -28,12 +28,14 @@ export class LoginComponent implements OnInit {
 	onSubmit() {
 		if (this.loginForm.valid) {
 			this.signInWithEmail();
-
 		}
 	}
 
 	signInWithEmail() {
-		this.fbService.signInWithEmail(this.loginForm.get('username').value, this.loginForm.get('password').value)
+		this.fbService.signInWithEmail(
+			this.loginForm.get('username').value,
+			this.loginForm.get('password').value
+		);
 		console.log('Signing in with email...');
 	}
 

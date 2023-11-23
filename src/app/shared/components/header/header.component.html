@@ -1,4 +1,6 @@
 <div class="header">
-	<div *ngIf="isLoggedIn | async" class="logout-btn fira" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i><-|</div>
+	<button *ngIf="isLoggedIn | async" class="logout-btn fira" (click)="logout()">
+		<i class="fa-solid fa-right-from-bracket"></i><-|
+	</button>
 	<h1 class="title fira"><span>HEX</span>GUESS</h1>
 </div>
