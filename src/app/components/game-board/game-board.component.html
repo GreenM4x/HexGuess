@@ -5,9 +5,11 @@
 			<div class="score">
 				<app-score></app-score>
 			</div>
-			<div class="hearts">
-				<app-heart *ngFor="let i of lives()" [isDead]="i"></app-heart>
-			</div>
+			@if (config.lives.enabled) {
+				<div class="hearts">
+					<app-heart *ngFor="let i of lives()" [isDead]="i"></app-heart>
+				</div>
+			}
 		</div>
 		<div class="ctg-container">
 			<div

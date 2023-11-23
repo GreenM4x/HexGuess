@@ -34,11 +34,14 @@ export class GameStateService {
 		return this.currentGame();
 	}
 
-	constructor(private gameConfigurationService: GameConfigurationService) {
-		this.config = this.gameConfigurationService.getGameConfig();
+	public get getConfig() {
+		return this.currentGame().config;
 	}
 
+	constructor(private gameConfigurationService: GameConfigurationService) {}
+
 	public startNewGame() {
+		this.config = this.gameConfigurationService.getGameConfig();
 		this.currentGame.set(new Game(this.config));
 	}
 
