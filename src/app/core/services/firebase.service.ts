@@ -34,6 +34,15 @@ export class FirebaseService {
 			});
 	}
 
+	signUpWithEmail(username: string, password: string) {
+		return this.angularAuthService
+			.createUserWithEmailAndPassword(username, password)
+			.then(() => this.router.navigate(['']))
+			.catch(err => {
+				console.log(err);
+			});
+	}
+
 	signInWithEmail(username: string, password: string) {
 		return this.angularAuthService
 			.signInWithEmailAndPassword(username, password)

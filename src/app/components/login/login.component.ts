@@ -67,6 +67,10 @@ export class LoginComponent implements OnInit {
 			this.loginForm.get('password').value ===
 			this.loginForm.get('repeatPassword').value
 		) {
+			this.fbService.signUpWithEmail(
+				this.loginForm.get('username').value,
+				this.loginForm.get('password').value
+			);
 			console.log('Signing up with email...');
 		} else {
 			this.pwError = 'Password not match.';
