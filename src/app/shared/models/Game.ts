@@ -32,7 +32,7 @@ export class Game {
 		this.score.update(prev => prev + score);
 	}
 
-	public descreaseLivesBy(num: number) {
+	public decreaseLivesBy(num: number) {
 		if (this.lives() > 0) {
 			this.lives.update(prev => prev - num);
 		}
@@ -81,7 +81,7 @@ export class Game {
 		this.timerInterval = setInterval(() => {
 			this.time.update(prev => prev - 1);
 			if (this.time() <= 0) {
-				this.descreaseLivesBy(1);
+				this.decreaseLivesBy(1);
 				if (this.config.lives.enabled && this.lives() > 0) {
 					this.restartTimer();
 					return;

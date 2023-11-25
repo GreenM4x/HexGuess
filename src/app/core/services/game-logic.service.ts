@@ -25,7 +25,7 @@ export class GameLogicService {
 			}
 		} else {
 			this.gameState.getCurrentRound().updateGuesses(guess.hexGuess);
-			this.gameState.getCurrentGame.descreaseLivesBy(1);
+			this.gameState.getCurrentGame.decreaseLivesBy(1);
 		}
 	}
 }
