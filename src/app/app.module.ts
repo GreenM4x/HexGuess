@@ -13,13 +13,13 @@ import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { AngularFireAnalyticsModule} from '@angular/fire/compat/analytics';
+import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
 
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
+import { LevelComponent } from './components/game-board/game-components/level/level.component';
 
 @NgModule({
 	declarations: [
@@ -30,6 +30,7 @@ import { CommonModule } from '@angular/common';
 		ScoreComponent,
 	],
 	imports: [
+		LevelComponent,
 		TimerComponent,
 		BrowserModule,
 		AppRoutingModule,

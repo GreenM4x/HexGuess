@@ -10,8 +10,8 @@ import { GameStateService } from '@core/services/game-state.service';
 export class GameBoardComponent {
 	public lives: Signal<boolean[]> = computed(() => this.updateLivesArray());
 
-	public get isGameOver() {
-		return this.gameStateSerivce.getGameState() === 'game-over';
+	public get gameState() {
+		return this.gameStateSerivce.getGameState();
 	}
 
 	public get currentRound() {

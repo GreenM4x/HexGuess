@@ -17,7 +17,7 @@ export type GameConfigType = {
 		responseOptionsCount: number;
 	};
 	game: {
-		mode: 'infinite' | 'turns' | 'time';
-		turns: number;
+		mode: 'infinite' | 'level' | 'time';
+		levels: number;
 	};
 };

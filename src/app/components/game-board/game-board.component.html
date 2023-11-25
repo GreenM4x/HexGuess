@@ -1,7 +1,12 @@
 <app-timer class="timer"></app-timer>
-<div class="container" [class.game-over]="isGameOver">
+<div class="container" [class.game-end]="gameState !== 'playing'">
 	<div class="game-container">
 		<div class="state">
+			@if (config.game.mode === 'level') {
+				<div class="level">
+					<app-level></app-level>
+				</div>
+			}
 			<div class="score">
 				<app-score></app-score>
 			</div>
@@ -25,9 +30,16 @@
 				[option]="i"></app-button>
 		</div>
 	</div>
-	<div class="game-over-container fira" *ngIf="isGameOver">
-		<div class="game-over-msg">
-			<h1>Game Over</h1>
+	<div class="game-end-container fira" *ngIf="gameState === 'game-over'">
+		<div class="game-end-msg">
+			<h1>Game Over 🪦</h1>
+			<h2>Score: {{ gameStateSerivce.getScore() }}</h2>
+			<button class="game-btn fira" (click)="restartGame()">Restart</button>
+		</div>
+	</div>
+	<div class="game-end-container fira" *ngIf="gameState === 'game-won'">
+		<div class="game-end-msg">
+			<h1>Game Won 🎉</h1>
 			<h2>Score: {{ gameStateSerivce.getScore() }}</h2>
 			<button class="game-btn fira" (click)="restartGame()">Restart</button>
 		</div>

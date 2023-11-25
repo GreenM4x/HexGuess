@@ -20,8 +20,8 @@ export const normalGameConfig: GameConfigType = {
 		responseOptionsCount: 4,
 	},
 	game: {
-		mode: 'infinite', // turns | infinite | time(evtl)
-		turns: 10,
+		mode: 'infinite', // level | infinite | time(evtl)
+		levels: 10,
 	},
 };
 
@@ -44,8 +44,8 @@ export const multiNormalGameConfig: GameConfigType = {
 		responseOptionsCount: 4,
 	},
 	game: {
-		mode: 'turns', // turns | infinite | time(evtl)
-		turns: 10,
+		mode: 'level', // level | infinite | time(evtl)
+		levels: 10,
 	},
 };
 

@@ -1,24 +1,29 @@
 import { Signal, WritableSignal, computed, signal } from '@angular/core';
 import { GameConfigType } from './GameConfigType';
 import { GameRound } from './GameRound';
+import seedrandom from 'seedrandom';
 
 export class Game {
 	config: GameConfigType;
-	rounds: GameRound[];
+	rounds: WritableSignal<GameRound[]>;
 	score: WritableSignal<number>;
 	lives: WritableSignal<number>;
 	time: WritableSignal<number>;
-	currentRound?: WritableSignal<GameRound>;
+	currentRound: WritableSignal<GameRound>;
 	gameState: Signal<'playing' | 'game-over' | 'game-won'>;
+	totalLevels: number;
 	private timerInterval: ReturnType<typeof setTimeout> | undefined;
+	private id: string = crypto.randomUUID();
+	private rngRoundSeed: seedrandom.PRNG = seedrandom(this.id);
 
 	constructor(config: GameConfigType) {
 		this.config = config;
-		this.rounds = [];
+		this.rounds = signal([]);
 		this.score = signal(0);
 		this.lives = signal(config.lives.count);
 		this.time = signal(config.time.count);
-		this.currentRound = signal(new GameRound(config));
+		this.totalLevels = config.game.levels;
+		this.currentRound = signal(new GameRound(config, this.id, 1));
 		this.gameState = computed(() => this.updateGameState(config));
 		this.startCountdownTimer();
 	}
@@ -34,28 +39,41 @@ export class Game {
 	}
 
 	public updateRounds(round: GameRound) {
-		this.rounds = [...this.rounds, round];
+		this.rounds.update(rounds => [...rounds, round]);
 	}
 
 	public nextRound() {
 		this.updateRounds(this.currentRound());
-		this.currentRound.set(new GameRound(this.config));
+		if (
+			this.config.game.mode === 'level' &&
+			this.rounds().length === this.config.game.levels
+		) {
+			return;
+		}
+		this.currentRound.set(
+			new GameRound(
+				this.config,
+				this.rngRoundSeed.int32().toString(),
+				this.rounds().length + 1
+			)
+		);
 		this.config.time.enabled && this.restartTimer();
 	}
 
 	private updateGameState(config: GameConfigType) {
-		if (this.lives() === 0) {
+		if (this.lives() === 0 && config.lives.enabled) {
 			this.resetCountdownTimer();
 			return 'game-over';
-		} else if (
-			config.game.mode === 'turns' &&
-			this.rounds.length === config.game.turns
+		}
+
+		if (
+			config.game.mode === 'level' &&
+			this.rounds().length === config.game.levels
 		) {
 			this.resetCountdownTimer();
 			return 'game-won';
-		} else {
-			return 'playing';
 		}
+		return 'playing';
 	}
 
 	private startCountdownTimer() {
@@ -64,7 +82,7 @@ export class Game {
 			this.time.update(prev => prev - 1);
 			if (this.time() <= 0) {
 				this.descreaseLivesBy(1);
-				if (this.lives() > 0) {
+				if (this.lives() > 0 && this.config.lives.enabled) {
 					this.restartTimer();
 				}
 				return;
