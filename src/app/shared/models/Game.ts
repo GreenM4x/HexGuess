@@ -82,8 +82,13 @@ export class Game {
 			this.time.update(prev => prev - 1);
 			if (this.time() <= 0) {
 				this.descreaseLivesBy(1);
-				if (this.lives() > 0 && this.config.lives.enabled) {
+				if (this.config.lives.enabled && this.lives() > 0) {
 					this.restartTimer();
+					return;
+				}
+				if (this.config.game.mode === 'level') {
+					this.nextRound();
+					return;
 				}
 				return;
 			}
