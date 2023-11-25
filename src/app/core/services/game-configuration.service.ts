@@ -9,7 +9,7 @@ export class GameConfigurationService {
 	private currentGameSettings;
 
 	constructor() {
-		this.currentGameSettings = gameModeConfig.normal;
+		this.currentGameSettings = gameModeConfig.multiNormal;
 	}
 
 	public updateGameConfig(config: GameConfigType) {
