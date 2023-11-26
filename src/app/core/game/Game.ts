@@ -1,5 +1,5 @@
 import { Signal, WritableSignal, computed, signal } from '@angular/core';
-import { GameConfigType } from './GameConfigType';
+import { GameConfigType } from '../../shared/models/GameConfigType';
 import { GameRound } from './GameRound';
 import seedrandom from 'seedrandom';
 

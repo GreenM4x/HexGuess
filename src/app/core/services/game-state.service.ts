@@ -1,7 +1,7 @@
 import { Injectable, WritableSignal, signal } from '@angular/core';
 import { GameConfigurationService } from './game-configuration.service';
 import { GameConfigType } from '@shared/models/GameConfigType';
-import { Game } from '@shared/models/Game';
+import { Game } from '@core/game/Game';
 
 @Injectable({
 	providedIn: 'root',

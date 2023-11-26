@@ -1,4 +1,4 @@
-import { GameConfigType } from './GameConfigType';
+import { GameConfigType } from '../../shared/models/GameConfigType';
 import seedrandom from 'seedrandom';
 
 export class GameRound {
