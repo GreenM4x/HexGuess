@@ -48,6 +48,7 @@ export class Game {
 			this.config.game.mode === 'level' &&
 			this.rounds().length === this.config.game.levels
 		) {
+			this.handleLevelEnd();
 			return;
 		}
 		this.currentRound.set(
@@ -58,6 +59,10 @@ export class Game {
 			)
 		);
 		this.config.time.enabled && this.restartTimer();
+	}
+
+	private handleLevelEnd() {
+		this.config.time.enabled && this.resetCountdownTimer();
 	}
 
 	private updateGameState(config: GameConfigType) {
@@ -81,16 +86,7 @@ export class Game {
 		this.timerInterval = setInterval(() => {
 			this.time.update(prev => prev - 1);
 			if (this.time() <= 0) {
-				this.decreaseLivesBy(1);
-				if (this.config.lives.enabled && this.lives() > 0) {
-					this.restartTimer();
-					return;
-				}
-				if (this.config.game.mode === 'level') {
-					this.nextRound();
-					return;
-				}
-				return;
+				this.handleTimerExpiration();
 			}
 		}, 1000);
 	}
@@ -99,8 +95,19 @@ export class Game {
 		clearInterval(this.timerInterval);
 	}
 
-	public restartTimer() {
+	private restartTimer() {
 		this.resetCountdownTimer();
 		this.startCountdownTimer();
+	}
+
+	private handleTimerExpiration() {
+		if (this.config.lives.enabled) {
+			this.decreaseLivesBy(1);
+			if (this.lives() > 0) {
+				this.restartTimer();
+			}
+		} else if (this.config.game.mode === 'level') {
+			this.nextRound();
+		}
 	}
 }
