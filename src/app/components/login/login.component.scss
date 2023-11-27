@@ -18,6 +18,15 @@ h2 span:nth-child(1) {
 
 .form-group {
 	margin-bottom: 15px;
+	input.ng-invalid.ng-touched {
+		border: 2px solid lightcoral;
+	}
+}
+
+.error-msg {
+	margin: 5px 0px;
+	color: lightcoral;
+	font-size: small;
 }
 
 label {

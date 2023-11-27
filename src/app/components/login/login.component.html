@@ -1,57 +1,43 @@
 <div class="login-container fira">
 	<h2>
-		<span>SIGN</span>
-		@if (isRegistered) {
-			<span>IN</span>
-		} @else {
-			<span>UP</span>
-		}
+		<span>SIGN</span> <span>{{ isRegistered ? 'IN' : 'UP' }}</span>
 	</h2>
 	<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-		<div class="form-group" *ngIf="!isRegistered">
+		<div *ngIf="!isRegistered" class="form-group">
 			<label for="playerName">Player Name:</label>
 			<input
 				type="text"
 				id="playerName"
-				autocomplete="username"
+				autocomplete="off"
 				formControlName="playerName" />
-			<div
-				*ngIf="
-					loginForm.get('playerName').hasError('required') &&
-					loginForm.get('playerName').touched
-				">
-				Player name is required.
-			</div>
-			<div
-				*ngIf="
-					loginForm.get('playerName').hasError('minlength') &&
-					loginForm.get('playerName').touched
-				">
-				Player name must be at least 3 characters long.
-			</div>
-			<div
-				*ngIf="
-					loginForm.get('playerName').hasError('maxlength') &&
-					loginForm.get('playerName').touched
-				">
-				Player name must be less than 20 characters long.
+			<div *ngIf="loginForm.get('playerName').touched" class="error-msg">
+				<p *ngIf="loginForm.get('playerName').hasError('required')">
+					Player name is required.
+				</p>
+				<p *ngIf="loginForm.get('playerName').hasError('minlength')">
+					Player name must be at least 3 characters long.
+				</p>
+				<p *ngIf="loginForm.get('playerName').hasError('maxlength')">
+					Player name must be less than 20 characters long.
+				</p>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="email">email:</label>
+			<label for="email">Email:</label>
 			<input
 				type="email"
 				id="email"
 				autocomplete="email"
 				formControlName="email" />
-			@if (
-				loginForm.get('email').hasError('required') &&
-				loginForm.get('email').touched
-			) {
-				<div>E-Mail is required.</div>
-			}
+			<p
+				class="error-msg"
+				*ngIf="
+					loginForm.get('email').hasError('required') &&
+					loginForm.get('email').touched
+				">
+				E-Mail is required.
+			</p>
 		</div>
-
 		<div class="form-group">
 			<label for="password">Password:</label>
 			<input
@@ -59,52 +45,44 @@
 				id="password"
 				[autocomplete]="isRegistered ? 'current-password' : 'new-password'"
 				formControlName="password" />
-			@if (
-				loginForm.get('password').hasError('required') &&
-				loginForm.get('password').touched
-			) {
-				<div>Password is required</div>
-			}
+			<p
+				class="error-msg"
+				*ngIf="
+					loginForm.get('password').hasError('required') &&
+					loginForm.get('password').touched
+				">
+				Password is required.
+			</p>
 		</div>
-		<div class="error" *ngIf="loginForm.getError('firebase') as error">
-			{{ error.message }}
+		<div *ngIf="!isRegistered" class="form-group">
+			<label for="repeatPassword">Confirm Password:</label>
+			<input
+				type="password"
+				id="repeatPassword"
+				autocomplete="off"
+				formControlName="repeatPassword" />
+			<div class="error-msg" *ngIf="loginForm.get('repeatPassword').dirty">
+				<p *ngIf="loginForm.get('repeatPassword').hasError('required')">
+					Confirm password is required.
+				</p>
+				<p *ngIf="loginForm.get('repeatPassword').hasError('mismatch')">
+					Passwords do not match.
+				</p>
+			</div>
 		</div>
-		<div class="form-group">
-			@if (isRegistered) {
-				<div class="new-user">
-					<p>Don't habe an account yet?</p>
-					<button class="text-btn" (click)="toggleToRegister()">
-						Register
-					</button>
-				</div>
-			} @else {
-				<label for="repeatPassword">Confirm Password:</label>
-				<input
-					type="password"
-					id="repeatPassword"
-					autocomplete="off"
-					formControlName="repeatPassword" />
-				<button class="text-btn" (click)="toggleToRegister()">Sign in</button>
-				@if (
-					loginForm.get('repeatPassword').hasError('required') &&
-					loginForm.get('repeatPassword').touched
-				) {
-					<div>Repeat password is required.</div>
-				} @else if (
-					loginForm.get('repeatPassword').hasError('mismatch') &&
-					loginForm.get('repeatPassword').touched
-				) {
-					<div>Passwords do not match.</div>
-				}
-			}
+		<div class="error-msg" *ngIf="loginForm.getError('firebase') as error">
+			{{ error }}
 		</div>
+		<div *ngIf="isRegistered" class="new-user">
+			<p>Don't have an account yet?</p>
+			<button class="text-btn" (click)="toggleToRegister()">Register</button>
+		</div>
+		<button *ngIf="!isRegistered" class="text-btn" (click)="toggleToRegister()">
+			Sign in
+		</button>
 		<div class="btn-container">
-			<button class="fira btn" type="submit" [disabled]="loginForm.invalid">
-				@if (isRegistered) {
-					Login
-				} @else {
-					SignUp
-				}
+			<button class="fira btn" type="submit" [disabled]="!isValidForm">
+				{{ isRegistered ? 'Login' : 'SignUp' }}
 			</button>
 			<button class="fira btn" type="button" (click)="signInWithGoogle()">
 				Sign in with Google
