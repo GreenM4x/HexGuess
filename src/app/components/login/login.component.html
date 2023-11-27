@@ -8,26 +8,66 @@
 		}
 	</h2>
 	<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+		<div class="form-group" *ngIf="!isRegistered">
+			<label for="playerName">Player Name:</label>
+			<input
+				type="text"
+				id="playerName"
+				autocomplete="username"
+				formControlName="playerName" />
+			<div
+				*ngIf="
+					loginForm.get('playerName').hasError('required') &&
+					loginForm.get('playerName').touched
+				">
+				Player name is required.
+			</div>
+			<div
+				*ngIf="
+					loginForm.get('playerName').hasError('minlength') &&
+					loginForm.get('playerName').touched
+				">
+				Player name must be at least 3 characters long.
+			</div>
+			<div
+				*ngIf="
+					loginForm.get('playerName').hasError('maxlength') &&
+					loginForm.get('playerName').touched
+				">
+				Player name must be less than 20 characters long.
+			</div>
+		</div>
 		<div class="form-group">
-			<label for="username">Username:</label>
-			<input type="text" id="username" formControlName="username" />
+			<label for="email">email:</label>
+			<input
+				type="email"
+				id="email"
+				autocomplete="email"
+				formControlName="email" />
 			@if (
-				loginForm.get('username').hasError('required') &&
-				loginForm.get('username').touched
+				loginForm.get('email').hasError('required') &&
+				loginForm.get('email').touched
 			) {
-				<div>Username is required.</div>
+				<div>E-Mail is required.</div>
 			}
 		</div>
 
 		<div class="form-group">
 			<label for="password">Password:</label>
-			<input type="password" id="password" formControlName="password" />
+			<input
+				type="password"
+				id="password"
+				[autocomplete]="isRegistered ? 'current-password' : 'new-password'"
+				formControlName="password" />
 			@if (
 				loginForm.get('password').hasError('required') &&
 				loginForm.get('password').touched
 			) {
-				<div>{{ pwError }}</div>
+				<div>Password is required</div>
 			}
+		</div>
+		<div class="error" *ngIf="loginForm.getError('firebase') as error">
+			{{ error.message }}
 		</div>
 		<div class="form-group">
 			@if (isRegistered) {
@@ -42,13 +82,19 @@
 				<input
 					type="password"
 					id="repeatPassword"
+					autocomplete="off"
 					formControlName="repeatPassword" />
 				<button class="text-btn" (click)="toggleToRegister()">Sign in</button>
 				@if (
 					loginForm.get('repeatPassword').hasError('required') &&
 					loginForm.get('repeatPassword').touched
 				) {
-					<div>{{ pwError }}</div>
+					<div>Repeat password is required.</div>
+				} @else if (
+					loginForm.get('repeatPassword').hasError('mismatch') &&
+					loginForm.get('repeatPassword').touched
+				) {
+					<div>Passwords do not match.</div>
 				}
 			}
 		</div>
