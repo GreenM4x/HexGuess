@@ -81,15 +81,41 @@
 			Sign in
 		</button>
 		<div class="btn-container">
-			<button class="fira btn" type="submit" [disabled]="!isValidForm">
-				{{ isRegistered ? 'Login' : 'SignUp' }}
+			<button
+				class="fira btn"
+				type="submit"
+				[disabled]="!isValidForm || isLoadingSignIn"
+				(click)="signInWithEmail()">
+				<ng-container
+					*ngIf="isLoadingSignIn; then loading; else signInText"></ng-container>
 			</button>
-			<button class="fira btn" type="button" (click)="signInWithGoogle()">
-				Sign in with Google
+			<ng-template #signInText>{{
+				isRegistered ? 'Login' : 'SignUp'
+			}}</ng-template>
+
+			<button
+				class="fira btn"
+				type="button"
+				[disabled]="isLoadingGoogle"
+				(click)="signInWithGoogle()">
+				<ng-container
+					*ngIf="isLoadingGoogle; then loading; else googleText"></ng-container>
 			</button>
-			<button class="fira btn" type="button" (click)="signInWithGitHub()">
-				Sign in with GitHub
+			<ng-template #googleText>Sign in with Google</ng-template>
+
+			<button
+				class="fira btn"
+				type="button"
+				[disabled]="isLoadingGitHub"
+				(click)="signInWithGitHub()">
+				<ng-container
+					*ngIf="isLoadingGitHub; then loading; else githubText"></ng-container>
 			</button>
+			<ng-template #githubText>Sign in with GitHub</ng-template>
 		</div>
 	</form>
 </div>
+
+<ng-template #loading>
+	<app-loading-spinner scale="0.5"></app-loading-spinner>
+</ng-template>

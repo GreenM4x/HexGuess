@@ -5,17 +5,21 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from '@core/services/firebase.service';
 import { matchingInputsValidator } from '@shared/validators/matching.validator';
+import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
 	selector: 'app-login',
 	standalone: true,
-	imports: [CommonModule, ReactiveFormsModule],
+	imports: [CommonModule, ReactiveFormsModule, LoadingSpinnerComponent],
 	templateUrl: './login.component.html',
 	styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
 	isRegistered: boolean = true;
 	loginForm!: FormGroup;
+	isLoadingSignIn: boolean = false;
+	isLoadingGoogle: boolean = false;
+	isLoadingGitHub: boolean = false;
 
 	public get isValidForm() {
 		if (this.isRegistered) {
@@ -60,11 +64,13 @@ export class LoginComponent implements OnInit {
 	}
 
 	public async onSubmit() {
+		this.isLoadingSignIn = true;
 		if (this.isValidForm && this.isRegistered) {
 			await this.signInWithEmail();
 		} else if (this.isValidForm && !this.isRegistered) {
 			await this.signUpWithEmail();
 		}
+		this.isLoadingSignIn = false;
 		this.router.navigate(['']);
 	}
 
@@ -92,12 +98,16 @@ export class LoginComponent implements OnInit {
 	}
 
 	public async signInWithGoogle() {
+		this.isLoadingGoogle = true;
 		await this.fbService.signInWithGoogle();
+		this.isLoadingGoogle = false;
 		this.router.navigate(['']);
 	}
 
 	public async signInWithGitHub() {
+		this.isLoadingGitHub = true;
 		await this.fbService.signInWithGitHub();
+		this.isLoadingGitHub = false;
 		this.router.navigate(['']);
 	}
 }

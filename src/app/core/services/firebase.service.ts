@@ -34,7 +34,7 @@ export class FirebaseService {
 			.signOut()
 			.then(() => this.router.navigate(['/auth']))
 			.catch(err => {
-				return Promise.reject(err.message);
+				return Promise.reject(err.message.split('.')?.[0]);
 			});
 	}
 
@@ -50,13 +50,13 @@ export class FirebaseService {
 			const user = await this.angularAuthService
 				.createUserWithEmailAndPassword(username, password)
 				.catch((err: FirebaseError) => {
-					return Promise.reject(err.message);
+					return Promise.reject(err.message.split('.')?.[0]);
 				});
 			return this.createPlayerAndUsername(
 				user as unknown as UserCredential,
 				playerName
 			).catch((err: FirebaseError) => {
-				return Promise.reject(err.message);
+				return Promise.reject(err.message.split('.')?.[0]);
 			});
 		}
 	}
@@ -65,7 +65,7 @@ export class FirebaseService {
 		await this.angularAuthService
 			.signInWithEmailAndPassword(username, password)
 			.catch(err => {
-				return Promise.reject(err.message);
+				return Promise.reject(err.message.split('.')?.[0]);
 			});
 	}
 
@@ -73,7 +73,7 @@ export class FirebaseService {
 		await this.angularAuthService
 			.signInWithPopup(new GoogleAuthProvider())
 			.catch((err: FirebaseError) => {
-				return Promise.reject(err.message);
+				return Promise.reject(err.message.split('.')?.[0]);
 			});
 	}
 
@@ -81,7 +81,7 @@ export class FirebaseService {
 		await this.angularAuthService
 			.signInWithPopup(new GithubAuthProvider())
 			.catch((err: FirebaseError) => {
-				return Promise.reject(err.message);
+				return Promise.reject(err.message.split('.')?.[0]);
 			});
 	}
 
