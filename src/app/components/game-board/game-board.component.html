@@ -1,18 +1,18 @@
-<app-timer class="timer"></app-timer>
+<app-timer class="timer" />
 <div class="container" [class.game-end]="gameState !== 'playing'">
 	<div class="game-container">
 		<div class="state">
 			@if (config.game.mode === 'level') {
 				<div class="level">
-					<app-level></app-level>
+					<app-level />
 				</div>
 			}
 			<div class="score">
-				<app-score></app-score>
+				<app-score />
 			</div>
 			@if (config.lives.enabled) {
 				<div class="hearts">
-					<app-heart *ngFor="let i of lives()" [isDead]="i"></app-heart>
+					<app-heart *ngFor="let i of lives()" [isDead]="i" />
 				</div>
 			}
 		</div>
@@ -27,7 +27,7 @@
 			<app-button
 				(btnClicked)="processGuess($event)"
 				*ngFor="let i of currentRound.options"
-				[option]="i"></app-button>
+				[option]="i" />
 		</div>
 	</div>
 	<div class="game-end-container fira" *ngIf="gameState === 'game-over'">
