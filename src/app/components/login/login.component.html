@@ -4,21 +4,28 @@
 	</h2>
 	<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 		<div *ngIf="!isRegistered" class="form-group">
-			<label for="playerName">Player Name:</label>
+			<label for="username">Username:</label>
 			<input
 				type="text"
-				id="playerName"
+				id="username"
 				autocomplete="off"
-				formControlName="playerName" />
-			<div *ngIf="loginForm.get('playerName').touched" class="error-msg">
-				<p *ngIf="loginForm.get('playerName').hasError('required')">
-					Player name is required.
+				formControlName="username" />
+			<div
+				*ngIf="
+					loginForm.get('username').touched || loginForm.get('username').dirty
+				"
+				class="error-msg">
+				<p *ngIf="loginForm.get('username').hasError('required')">
+					Username is required.
 				</p>
-				<p *ngIf="loginForm.get('playerName').hasError('minlength')">
-					Player name must be at least 3 characters long.
+				<p *ngIf="loginForm.get('username').hasError('minlength')">
+					Username must be at least 3 characters long.
 				</p>
-				<p *ngIf="loginForm.get('playerName').hasError('maxlength')">
-					Player name must be less than 20 characters long.
+				<p *ngIf="loginForm.get('username').hasError('maxlength')">
+					Username must be less than 20 characters long.
+				</p>
+				<p *ngIf="loginForm.get('username').hasError('invalidChars')">
+					Only alphanumeric characters, dashes, and underscores allowed.
 				</p>
 			</div>
 		</div>

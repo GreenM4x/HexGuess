@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from '@core/services/firebase.service';
 import { matchingInputsValidator } from '@shared/validators/matching.validator';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
+import { UsernameValidator } from '../../shared/validators/username.validator';
 
 @Component({
 	selector: 'app-login',
@@ -41,12 +42,13 @@ export class LoginComponent implements OnInit {
 	ngOnInit() {
 		this.loginForm = this.formBuilder.group(
 			{
-				playerName: [
+				username: [
 					'',
 					[
 						Validators.required,
 						Validators.minLength(3),
 						Validators.maxLength(20),
+						UsernameValidator(),
 					],
 				],
 				email: ['', [Validators.required]],
@@ -61,6 +63,7 @@ export class LoginComponent implements OnInit {
 
 	toggleToRegister() {
 		this.isRegistered = !this.isRegistered;
+		this.loginForm.reset();
 	}
 
 	public async onSubmit() {
@@ -80,8 +83,8 @@ export class LoginComponent implements OnInit {
 				this.loginForm.get('email').value,
 				this.loginForm.get('password').value
 			)
-			.catch(msg => {
-				this.loginForm.setErrors({ firebase: msg });
+			.catch((err: string) => {
+				this.loginForm.setErrors({ firebase: err });
 			});
 	}
 
@@ -90,23 +93,27 @@ export class LoginComponent implements OnInit {
 			.signUpWithEmail(
 				this.loginForm.get('email').value,
 				this.loginForm.get('password').value,
-				this.loginForm.get('playerName').value
+				this.loginForm.get('username').value
 			)
-			.catch(err => {
+			.catch((err: string) => {
 				this.loginForm.setErrors({ firebase: err });
 			});
 	}
 
 	public async signInWithGoogle() {
 		this.isLoadingGoogle = true;
-		await this.fbService.signInWithGoogle();
+		await this.fbService.signInWithGoogle().catch((err: string) => {
+			this.loginForm.setErrors({ firebase: err });
+		});
 		this.isLoadingGoogle = false;
 		this.router.navigate(['']);
 	}
 
 	public async signInWithGitHub() {
 		this.isLoadingGitHub = true;
-		await this.fbService.signInWithGitHub();
+		await this.fbService.signInWithGitHub().catch((err: string) => {
+			this.loginForm.setErrors({ firebase: err });
+		});
 		this.isLoadingGitHub = false;
 		this.router.navigate(['']);
 	}
