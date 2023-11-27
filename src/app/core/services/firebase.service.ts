@@ -4,9 +4,12 @@ import {
 	GoogleAuthProvider,
 	GithubAuthProvider,
 	User,
+	UserCredential,
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import { Observable, map, lastValueFrom } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { FirebaseError } from 'firebase/app';
 
 @Injectable({
 	providedIn: 'root',
@@ -16,6 +19,7 @@ export class FirebaseService {
 
 	constructor(
 		private angularAuthService: AngularFireAuth,
+		private firestore: AngularFirestore,
 		private router: Router
 	) {
 		this.user$ = angularAuthService.authState;
@@ -25,56 +29,87 @@ export class FirebaseService {
 		return this.user$.pipe(map(user => user !== null));
 	}
 
-	logout() {
+	public async logout() {
 		return this.angularAuthService
 			.signOut()
 			.then(() => this.router.navigate(['/auth']))
 			.catch(err => {
-				console.log(err);
+				return Promise.reject(err.message);
 			});
 	}
 
-	signUpWithEmail(username: string, password: string) {
-		return this.angularAuthService
-			.createUserWithEmailAndPassword(username, password)
-			.then(() => this.router.navigate(['']))
-			.catch(err => {
-				console.log(err);
+	public async signUpWithEmail(
+		username: string,
+		password: string,
+		playerName: string
+	) {
+		const userNameExists = await this.checkUsernameExists(playerName);
+		if (userNameExists) {
+			return Promise.reject('Username already taken');
+		} else {
+			const user = await this.angularAuthService
+				.createUserWithEmailAndPassword(username, password)
+				.catch((err: FirebaseError) => {
+					return Promise.reject(err.message);
+				});
+			return this.createPlayerAndUsername(
+				user as unknown as UserCredential,
+				playerName
+			).catch((err: FirebaseError) => {
+				return Promise.reject(err.message);
 			});
+		}
 	}
 
-	signInWithEmail(username: string, password: string) {
-		return this.angularAuthService
+	public async signInWithEmail(username: string, password: string) {
+		await this.angularAuthService
 			.signInWithEmailAndPassword(username, password)
-			.then(() => this.router.navigate(['']))
 			.catch(err => {
-				console.log(err);
+				return Promise.reject(err.message);
 			});
 	}
 
-	signInWithGoogle() {
-		return this.angularAuthService
+	public async signInWithGoogle() {
+		await this.angularAuthService
 			.signInWithPopup(new GoogleAuthProvider())
-			.then(
-				() => {
-					this.router.navigate(['']);
-				},
-				err => {
-					alert(err.message);
-				}
-			);
+			.catch((err: FirebaseError) => {
+				return Promise.reject(err.message);
+			});
 	}
 
-	signInWithGitHub() {
-		return this.angularAuthService
+	public async signInWithGitHub() {
+		await this.angularAuthService
 			.signInWithPopup(new GithubAuthProvider())
-			.then(
-				() => {
-					this.router.navigate(['']);
-				},
-				err => {
-					alert(err.message);
-				}
-			);
+			.catch((err: FirebaseError) => {
+				return Promise.reject(err.message);
+			});
+	}
+
+	private checkUsernameExists(username: string): Promise<boolean> {
+		return lastValueFrom(
+			this.firestore
+				.collection('usernames')
+				.doc(username)
+				.get()
+				.pipe(
+					map(docSnapshot => {
+						return docSnapshot.exists;
+					})
+				)
+		);
+	}
+
+	private async createPlayerAndUsername(
+		result: UserCredential,
+		playerName: string
+	) {
+		return Promise.all([
+			this.firestore.collection('players').doc(result.user.uid).set({
+				playerName: playerName,
+			}),
+			this.firestore.collection('usernames').doc(playerName).set({
+				userId: result.user.uid,
+			}),
+		]);
 	}
 }
