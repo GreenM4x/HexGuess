@@ -22,13 +22,7 @@ import { CommonModule } from '@angular/common';
 import { LevelComponent } from './components/game-board/game-components/level/level.component';
 
 @NgModule({
-	declarations: [
-		AppComponent,
-		GameBoardComponent,
-		ButtonComponent,
-		HeartComponent,
-		ScoreComponent,
-	],
+	declarations: [AppComponent],
 	imports: [
 		LevelComponent,
 		TimerComponent,
@@ -45,6 +39,10 @@ import { LevelComponent } from './components/game-board/game-components/level/le
 		AngularFireAuthModule,
 		FormsModule,
 		CommonModule,
+		GameBoardComponent,
+		ButtonComponent,
+		HeartComponent,
+		ScoreComponent,
 	],
 	providers: [],
 	bootstrap: [AppComponent],

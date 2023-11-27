@@ -1,11 +1,26 @@
 import { Component, Signal, computed } from '@angular/core';
 import { GameLogicService } from '@services/game-logic.service';
 import { GameStateService } from '@core/services/game-state.service';
+import { ButtonComponent } from './game-components/button/button.component';
+import { HeartComponent } from './game-components/heart/heart.component';
+import { CommonModule } from '@angular/common';
+import { ScoreComponent } from './game-components/score/score.component';
+import { LevelComponent } from './game-components/level/level.component';
+import { TimerComponent } from './game-components/timer/timer.component';
 
 @Component({
 	selector: 'app-game-board',
 	templateUrl: './game-board.component.html',
 	styleUrls: ['./game-board.component.scss'],
+	standalone: true,
+	imports: [
+		CommonModule,
+		TimerComponent,
+		LevelComponent,
+		ScoreComponent,
+		HeartComponent,
+		ButtonComponent,
+	],
 })
 export class GameBoardComponent {
 	public lives: Signal<boolean[]> = computed(() => this.updateLivesArray());

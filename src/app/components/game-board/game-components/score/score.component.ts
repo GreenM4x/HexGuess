@@ -5,6 +5,7 @@ import { GameStateService } from '@core/services/game-state.service';
 	selector: 'app-score',
 	templateUrl: './score.component.html',
 	styleUrls: ['./score.component.scss'],
+	standalone: true,
 })
 export class ScoreComponent {
 	public get score() {
