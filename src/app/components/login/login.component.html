@@ -24,7 +24,7 @@
 				<p *ngIf="loginForm.get('username').hasError('maxlength')">
 					Username must be less than 20 characters long.
 				</p>
-				<p *ngIf="loginForm.get('username').hasError('invalidChars')">
+				<p *ngIf="loginForm.get('username').hasError('pattern')">
 					Only alphanumeric characters, dashes, and underscores allowed.
 				</p>
 			</div>

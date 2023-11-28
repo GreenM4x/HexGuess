@@ -6,7 +6,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from '@core/services/firebase.service';
 import { matchingInputsValidator } from '@shared/validators/matching.validator';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
-import { UsernameValidator } from '../../shared/validators/username.validator';
 
 @Component({
 	selector: 'app-login',
@@ -48,7 +47,7 @@ export class LoginComponent implements OnInit {
 						Validators.required,
 						Validators.minLength(3),
 						Validators.maxLength(20),
-						UsernameValidator(),
+						Validators.pattern('^[a-zA-Z0-9-_]+$'),
 					],
 				],
 				email: ['', [Validators.required]],
