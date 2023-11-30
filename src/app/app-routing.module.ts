@@ -8,6 +8,7 @@ import {
 
 import { LoginComponent } from './components/login/login.component';
 import { GameBoardComponent } from './components/game-board/game-board.component';
+import { GameSelectComponent } from './components/game-select/game-select.component';
 
 const redirectToLogin = () => redirectUnauthorizedTo(['auth']);
 const redirectLoggedInToGameBoard = () => redirectLoggedInTo(['']);
@@ -20,6 +21,11 @@ const routes: Routes = [
 	},
 	{
 		path: '',
+		component: GameSelectComponent,
+		...canActivate(redirectToLogin),
+	},
+	{
+		path: 'game',
 		component: GameBoardComponent,
 		...canActivate(redirectToLogin),
 	},
