@@ -3,5 +3,6 @@
 </a>
 <h1 align="center">HexGuess</h1>
 <p align="center">
+  <a href="https://hexguess.kellerkind.dev/"> Click to Game </a>
   <img src="https://puu.sh/JVhRs/f9e0fd01a3.png" style="width: 300px" />
 </p>
