@@ -25,7 +25,7 @@ const routes: Routes = [
 		...canActivate(redirectToLogin),
 	},
 	{
-		path: 'game',
+		path: 'game/:gameMode',
 		component: GameBoardComponent,
 		...canActivate(redirectToLogin),
 	},

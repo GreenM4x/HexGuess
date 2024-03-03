@@ -1,6 +1,9 @@
 import { GameConfigType } from './GameConfigType';
 
 export type GameModeType = {
-	normal: GameConfigType;
-	multiNormal: GameConfigType;
+	hex: GameConfigType;
+	hexInfinite: GameConfigType;
+	color: GameConfigType;
+	colorInfinite: GameConfigType;
+	onlineHex: GameConfigType;
 };

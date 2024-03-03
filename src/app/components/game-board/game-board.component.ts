@@ -7,6 +7,9 @@ import { CommonModule } from '@angular/common';
 import { ScoreComponent } from './game-components/score/score.component';
 import { LevelComponent } from './game-components/level/level.component';
 import { TimerComponent } from './game-components/timer/timer.component';
+import { ActivatedRoute } from '@angular/router';
+import { GameConfigurationService } from '../../core/services/game-configuration.service';
+import { GameModeEnum } from '../../core/config/game.config';
 
 @Component({
 	selector: 'app-game-board',
@@ -39,9 +42,15 @@ export class GameBoardComponent {
 
 	constructor(
 		public gameStateSerivce: GameStateService,
-		private gameLogicService: GameLogicService
+		private gameLogicService: GameLogicService,
+		private gameConfigurationService: GameConfigurationService,
+		private activatedRoute: ActivatedRoute
 	) {
-		this.gameStateSerivce.startNewGame();
+		this.activatedRoute.params.subscribe(params => {
+			const gameMode: GameModeEnum = params['gameMode'];
+			this.gameConfigurationService.updateGameConfig(gameMode);
+			this.gameStateSerivce.startNewGame();
+		});
 	}
 
 	public processGuess(color: string) {
