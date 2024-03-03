@@ -9,19 +9,29 @@
 		color: var(--primary-color);
 	}
 
-	.logout-btn {
-		cursor: pointer;
+	.navigation {
 		position: absolute;
-		left: 25px;
 		top: 25px;
-		background-color: var(--background-color);
-		border: 5px solid var(--secondary-color);
-		border-radius: 10%;
-		padding: 5px;
-		color: white;
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		padding: 0 2rem;
 
-		&:hover {
-			transform: scale(110%);
+		.btn {
+			cursor: pointer;
+			background-color: var(--background-color);
+			border: 5px solid var(--secondary-color);
+			border-radius: 10%;
+			padding: 5px;
+			color: white;
+
+			&:hover {
+				transform: scale(110%);
+			}
+
+			&.logout-btn {
+				margin-left: auto;
+			}
 		}
 	}
 }

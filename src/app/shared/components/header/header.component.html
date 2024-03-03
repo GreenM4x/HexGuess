@@ -1,6 +1,17 @@
 <div class="header">
-	<button *ngIf="isLoggedIn | async" class="logout-btn fira" (click)="logout()">
-		<i class="fa-solid fa-right-from-bracket"></i><-|
-	</button>
+	<div class="navigation">
+		<button
+			*ngIf="(isLoggedIn | async) && gameIsActive"
+			class="btn back-btn fira"
+			(click)="back()">
+			<fa-icon [icon]="faChevronLeft"></fa-icon>
+		</button>
+		<button
+			*ngIf="(isLoggedIn | async) && !gameIsActive"
+			class="btn logout-btn fira"
+			(click)="logout()">
+			<-|
+		</button>
+	</div>
 	<h1 class="title fira"><span>HEX</span>GUESS</h1>
 </div>

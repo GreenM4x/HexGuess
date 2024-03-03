@@ -1,4 +1,4 @@
-import { Component, Signal, computed } from '@angular/core';
+import { Component, OnDestroy, Signal, computed } from '@angular/core';
 import { GameLogicService } from '@services/game-logic.service';
 import { GameStateService } from '@core/services/game-state.service';
 import { ButtonComponent } from './game-components/button/button.component';
@@ -25,7 +25,7 @@ import { GameModeEnum } from '../../core/config/game.config';
 		ButtonComponent,
 	],
 })
-export class GameBoardComponent {
+export class GameBoardComponent implements OnDestroy {
 	public lives: Signal<boolean[]> = computed(() => this.updateLivesArray());
 
 	public get gameState() {
@@ -62,6 +62,10 @@ export class GameBoardComponent {
 
 	public restartGame() {
 		this.gameStateSerivce.startNewGame();
+	}
+
+	public ngOnDestroy(): void {
+		this.gameStateSerivce.endGame();
 	}
 
 	private updateLivesArray() {

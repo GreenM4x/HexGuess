@@ -48,4 +48,8 @@ export class GameStateService {
 	public startNewRound() {
 		this.currentGame().nextRound();
 	}
+
+	public endGame() {
+		this.currentGame.set(null);
+	}
 }
