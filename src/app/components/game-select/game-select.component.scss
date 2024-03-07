@@ -3,8 +3,18 @@
 	flex-direction: column;
 	height: 100%;
 
+	.logo {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-basis: 55%;
+		width: 100%;
+		img {
+			width: 100%;
+		}
+	}
 	.selection {
-		flex-basis: 45%;
+		flex-basis: auto;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
