@@ -4,6 +4,7 @@ import { FirebaseService } from '@core/services/firebase.service';
 import { Observable } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { GameStateService } from '../../../core/services/game-state.service';
 
 @Component({
@@ -16,6 +17,7 @@ import { GameStateService } from '../../../core/services/game-state.service';
 export class HeaderComponent implements OnInit {
 	isLoggedIn: Observable<boolean> = new Observable<boolean>();
 	faChevronLeft = faChevronLeft;
+	faRightFromBracket = faRightFromBracket;
 
 	public get gameIsActive() {
 		return this.gameStateService?.getCurrentGame;

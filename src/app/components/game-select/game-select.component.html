@@ -1,15 +1,9 @@
 <div class="container">
 	<div class="selection">
-		<button (click)="startGame(gameModes.onlineHex)" [disabled]="true">
-			[Coming Soon] Online 4Hex Battle
+		<button class="barcode" (click)="startGame(gameModes.onlineHex)" [disabled]="true">
+			PLAY ONLINE
 		</button>
-		<button (click)="startGame(gameModes.hexInfinite)">Infinity in 4Hex</button>
-		<button (click)="startGame(gameModes.hex)">Top10 in 4Hex</button>
-		<button (click)="startGame(gameModes.colorInfinite)" [disabled]="true">
-			[Coming Soon] Infinity in 4Color
-		</button>
-		<button (click)="startGame(gameModes.color)" [disabled]="true">
-			[Coming Soon] Top10 in 4Color
-		</button>
+		<button class="barcode" (click)="startGame(gameModes.hexInfinite)">INFINIT</button>
+		<button class="barcode" (click)="startGame(gameModes.hex)">TOP10</button>
 	</div>
 </div>

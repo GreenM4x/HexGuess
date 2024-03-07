@@ -10,7 +10,7 @@
 			*ngIf="(isLoggedIn | async) && !gameIsActive"
 			class="btn logout-btn fira"
 			(click)="logout()">
-			<-|
+			<fa-icon [icon]="faRightFromBracket"></fa-icon>
 		</button>
 	</div>
 	<h1 class="title fira"><span>HEX</span>GUESS</h1>

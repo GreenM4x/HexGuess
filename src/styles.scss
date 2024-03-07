@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Text&display=swap');
 
 :root {
 	--background-color: #11151c;
@@ -24,4 +25,9 @@ body {
 
 .fira {
 	font-family: 'Fira Code', monospace;
+}
+.barcode {
+	font-family: 'Libre Barcode 39 Text', system-ui;
+	font-weight: 400;
+	font-style: normal;
 }
