@@ -11,8 +11,8 @@ on:
 
 env:
     REGISTRY: ghcr.io
-    SERVER_IMAGE: ghcr.io/GreenM4x/hexguess-server
-    WEB_IMAGE: ghcr.io/GreenM4x/hexguess-web
+    SERVER_IMAGE: ghcr.io/greenm4x/hexguess-server
+    WEB_IMAGE: ghcr.io/greenm4x/hexguess-web
 
 jobs:
     docker-build-and-push:
@@ -22,9 +22,9 @@ jobs:
           matrix:
             include:
               - dockerfile: ./backend/Dockerfile
-                image: ghcr.io/GreenM4x/hexguess-server
+                image: ghcr.io/greenm4x/hexguess-server
               - dockerfile: ./frontend/Dockerfile
-                image: ghcr.io/GreenM4x/hexguess-web
+                image: ghcr.io/greenm4x/hexguess-web
         permissions:
           contents: read
           packages: write
