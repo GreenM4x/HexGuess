@@ -24,9 +24,12 @@ jobs:
               - dockerfile: ./backend/Dockerfile
                 image: ghcr.io/greenm4x/hexguess-server
                 path: ./backend
+                name: backend
               - dockerfile: ./frontend/Dockerfile
                 image: ghcr.io/greenm4x/hexguess-web
                 path: ./frontend
+                name: frontend
+        name: Build & deploy ${{ matrix.name }} image 🚀
         permissions:
           contents: read
           packages: write
