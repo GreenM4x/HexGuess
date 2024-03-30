@@ -3,7 +3,7 @@ version: '3'
 services:
     hexguess-web:
         container_name: hexguess-web
-        image: xd33m/hexguess-web:latest
+        image: ghcr.io/greenm4x/hexguess-web:latest
         restart: unless-stopped
         ports:
             - 9494:3000
@@ -17,7 +17,7 @@ services:
 
     hexguess-server:
         container_name: hexguess-server
-        image: xd33m/hexguess-server:latest
+        image: ghcr.io/greenm4x/hexguess-server:latest
         ports:
             - 9595:3000
         restart: unless-stopped
