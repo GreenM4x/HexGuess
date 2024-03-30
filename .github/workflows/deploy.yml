@@ -23,8 +23,10 @@ jobs:
             include:
               - dockerfile: ./backend/Dockerfile
                 image: ghcr.io/greenm4x/hexguess-server
+                path: ./backend
               - dockerfile: ./frontend/Dockerfile
                 image: ghcr.io/greenm4x/hexguess-web
+                path: ./frontend
         permissions:
           contents: read
           packages: write
@@ -67,7 +69,7 @@ jobs:
             - name: Build and push Hexguess Server images 🛠️
               uses: docker/build-push-action@v5
               with:
-                  context: .
+                  context: ${{ matrix.path }}
                   file: ${{ matrix.dockerfile }}
                   tags: |
                       ${{ matrix.image }}:latest
