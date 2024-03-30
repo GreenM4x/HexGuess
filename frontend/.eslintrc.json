@@ -32,6 +32,7 @@
             "style": "kebab-case"
           }
         ],
+        "@typescript-eslint/no-explicit-any":"warn",
         "prettier/prettier": [
           "error",
           {
@@ -43,6 +44,18 @@
     {
       "files": ["*.html"],
       "extends": ["plugin:@angular-eslint/template/recommended"],
+      "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+              "endOfLine": "auto"
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.json"],
+      "extends": ["plugin:json/recommended", "plugin:prettier/recommended"],
       "rules": {
         "prettier/prettier": [
           "error",

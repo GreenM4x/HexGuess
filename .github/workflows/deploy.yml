@@ -1,0 +1,107 @@
+# https://pabluc.medium.com/raspberrypi-github-actions-ci-cd-1dc098b4c7d3
+name: Unstable release
+
+concurrency:
+    group: ${{ github.ref }}
+    cancel-in-progress: true
+
+on:
+    push:
+        branches: ['main']
+
+env:
+    REGISTRY: ghcr.io
+    SERVER_IMAGE: ghcr.io/GreenM4x/hexguess-server
+    WEB_IMAGE: ghcr.io/GreenM4x/hexguess-web
+
+jobs:
+    docker-build-and-push:
+        runs-on: ubuntu-latest
+        strategy:
+          fail-fast: false
+          matrix:
+            include:
+              - dockerfile: ./backend/Dockerfile
+                image: ghcr.io/GreenM4x/hexguess-server
+              - dockerfile: ./frontend/Dockerfile
+                image: ghcr.io/GreenM4x/hexguess-web
+        permissions:
+          contents: read
+          packages: write
+
+        steps:
+            # Access Repository in action
+            - name: Checkout ⬇️
+              uses: actions/checkout@v3
+
+            - name: Get current date ⌛
+              id: date
+              run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+            - name: Get commit hash ⚙️
+              id: sha
+              run: echo "sha=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
+            # action can be useful if you want to add emulation support with QEMU
+            # to be able to build against more platforms.
+            - name: Configure QEMU ⚙️
+              uses: docker/setup-qemu-action@v3
+            # action will create and boot a builder using by default the docker-container builder driver.
+            # This is not required but recommended using it to be able to build multi-platform images, export cache, etc.
+            - name: Configure Docker Buildx ⚙️
+              uses: docker/setup-buildx-action@v3
+
+            - name: Login to Github Container Registry
+              uses: docker/login-action@v2
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ github.repository_owner }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Extract metadata (tags, labels) for Docker
+              id: meta
+              uses: docker/metadata-action@v5
+              with:
+                images: ${{ matrix.image }}
+
+            - name: Build and push Hexguess Server images 🛠️
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  file: ${{ matrix.dockerfile }}
+                  tags: |
+                      ${{ matrix.image }}:latest
+                      ${{ matrix.image }}:main
+                      ${{ matrix.image }}:main.${{ steps.date.outputs.date }}.${{ steps.sha.outputs.sha }}
+                      ${{ steps.meta.outputs.tags }}
+                  labels: ${{ steps.meta.outputs.labels }}
+                  platforms: linux/arm64
+                  push: true
+
+    run-on-pi:
+        runs-on: self-hosted # Raspberry Pi
+        # environment: production
+        needs: docker-build-and-push
+        steps:
+            # Checkout repo to get docker compose file (can maybe provided from previous job later)
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Login to Github Container Registry
+              uses: docker/login-action@v2
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.repository_owner }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Pull latest server image
+              run: docker pull ${{ env.SERVER_IMAGE }}:latest
+
+            - name: Pull latest web image
+              run: docker pull ${{ env.WEB_IMAGE }}:latest
+              
+            - name: Run docker image
+              run: docker compose up -d --build
+
+            - name: Remove old unused image
+              run: docker image prune -a -f --filter "label=name=hexguess"
