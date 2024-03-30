@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+    hexguess-web:
+        container_name: hexguess-web
+        image: xd33m/hexguess-web:v0.2
+        restart: unless-stopped
+        ports:
+            - 9494:3000
+        labels:
+            traefik.enable: true
+            traefik.http.routers.hexguess-web.entrypoints: https
+            traefik.http.services.hexguess-web.loadbalancer.server.port: 3000
+            traefik.http.routers.hexguess-web.rule: Host(`hexguess.kellerkind.dev`)
+        networks:
+            - web
+
+    hexguess-server:
+        container_name: hexguess-server
+        image: xd33m/hexguess-server:v0.2
+        ports:
+            - 9595:3000
+        restart: unless-stopped
+        labels:
+            traefik.enable: true
+            traefik.http.routers.hexguess-server.entryPoints: https
+            traefik.http.services.hexguess-server.loadbalancer.server.port: 3000
+            traefik.http.routers.hexguess-server.rule: (Host(`hexguess.kellerkind.dev`) && PathPrefix(`/api`))
+        networks:
+            - web
+
+networks:
+  web:
+    external: true

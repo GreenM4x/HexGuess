@@ -17,7 +17,10 @@
 				"build": {
 					"builder": "@angular-devkit/build-angular:application",
 					"options": {
-						"outputPath": "dist/hex-guess",
+						"allowedCommonJsDependencies": [
+							"seedrandom"
+						],
+						"outputPath": "dist/hexguess-web",
 						"index": "src/index.html",
 						"browser": "src/main.ts",
 						"polyfills": [
@@ -40,8 +43,8 @@
 							"budgets": [
 								{
 									"type": "initial",
-									"maximumWarning": "500kb",
-									"maximumError": "1mb"
+									"maximumWarning": "2mb",
+									"maximumError": "2mb"
 								},
 								{
 									"type": "anyComponentStyle",
