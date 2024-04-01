@@ -28,6 +28,16 @@ export class FirebaseService {
 		return this.user$.pipe(map(user => user !== null));
 	}
 
+	public async getUsernameFromUserId(userId: string): Promise<string> {
+		if (userId) {
+			const playerDoc = await lastValueFrom(this.firestore.collection('players').doc(userId).get());
+			if (playerDoc.exists) {
+				return (playerDoc.data() as { username: string }).username;
+			}
+		}
+		return 'Anonymous User 👀';
+	}
+
 	public async logout() {
 		return this.angularAuthService
 			.signOut()
