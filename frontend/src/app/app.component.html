@@ -4,3 +4,14 @@
 		<router-outlet></router-outlet>
 	</div>
 </div>
+
+<div class="fira connected-users">
+	<div class="header">
+		<h3>Connected Users</h3>
+	</div>
+	<ul class="user-list">
+		<li *ngFor="let user of connectedUsers()" class="user-item">
+			<span>{{ user }}</span>
+		</li>
+	</ul>
+</div>

@@ -1,0 +1,14 @@
+{
+    "colorTabs.config": [
+        {
+            "regex": "frontend/.*",
+            "color": "#ae00ff49",
+        },
+        {
+            "regex": "backend/.*",
+            "color": "#3c536e",
+        },
+    ],
+    "colorTabs.ignoreCase": true,
+    "colorTabs.tabBackground": true,
+}

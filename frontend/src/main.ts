@@ -1,9 +1,8 @@
-import { inject } from '@vercel/analytics';
+// import { inject } from '@vercel/analytics';
 
-inject();
+// inject();
 
 import { AppComponent } from './app/app.component';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
@@ -29,7 +28,6 @@ bootstrapApplication(AppComponent, {
 			AngularFireAnalyticsModule,
 			AngularFireAuthModule,
 			FormsModule,
-			CommonModule
 		),
 	],
 }).catch(err => console.error(err));
