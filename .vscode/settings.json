@@ -11,4 +11,5 @@
     ],
     "colorTabs.ignoreCase": true,
     "colorTabs.tabBackground": true,
+    "typescript.preferences.importModuleSpecifierEnding": "js"
 }

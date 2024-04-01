@@ -1,7 +1,6 @@
-import {
-	WSMessageType,
-} from '../models/WebSocketModels';
-import { SocketIOLogs } from './socket-io';
+import { WSMessageType } from "../models/WebSocketModels.js";
+import SocketIOLogs from "./socket-io.js";
+
 
 
 export function handleIncomingMessage(server: SocketIOLogs, message: any, socketId: string) {

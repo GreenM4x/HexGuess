@@ -6,8 +6,8 @@
   "exports": "./dist/server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --watch ./**/*.ts --exec node --no-warnings --es-module-specifier-resolution=node --loader ts-node/esm ./src/server.ts",
-    "start": "node --no-warnings --es-module-specifier-resolution=node ./dist/server.js",
+    "dev": "nodemon --watch ./**/*.ts --exec node --no-warnings --loader ts-node/esm ./src/server.ts",
+    "start": "node --no-warnings ./dist/server.js",
     "build": "tsc --project tsconfig.production.json"
   },
   "author": "",

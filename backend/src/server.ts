@@ -1,7 +1,7 @@
 import express from 'express';
 import { createServer } from 'node:http';
 import cors from 'cors';
-import { SocketIOLogs } from './websocket/socket-io';
+import SocketIOLogs from './websocket/socket-io.js';
 import 'dotenv/config';
 
 const app = express();

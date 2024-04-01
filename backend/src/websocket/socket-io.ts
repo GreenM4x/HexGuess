@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io';
-import { handleIncomingMessage } from './messageHandler';
+import { handleIncomingMessage } from './messageHandler.js';
 
 interface ConnectedUser {
     userId: string;
@@ -7,7 +7,7 @@ interface ConnectedUser {
     sessionId?: string;
 }
 
-export class SocketIOLogs {
+export default class SocketIOLogs {
     io: Server;
     connectedUsers: ConnectedUser[] = [];
 
