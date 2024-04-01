@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { WebSocketService } from './core/services/websocket.service';
+import { SocketIOService } from './core/services/socket-io.service';
 
 @Component({
 	selector: 'app-root',
@@ -14,32 +14,26 @@ import { WebSocketService } from './core/services/websocket.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-	public isConnected = this.webSocketService.isConnected;
-	public messages = this.webSocketService.messages;
+	public isConnected = this.socketIOService.isConnected;
+	public messages = this.socketIOService.messages;
 
 	public get connectedUsers() {
-		return this.webSocketService.connectedUsers;
+		return this.socketIOService.connectedUsers;
 	}
 
-	constructor(private http: HttpClient, private webSocketService: WebSocketService) {
+	constructor(private http: HttpClient, private socketIOService: SocketIOService) {
 		this.http.get<{ message: string }>('/api/hello').subscribe((data: { message: string }) => {
 			console.log(data);
 		});
 	}
 
 	ngOnInit() {
-		this.webSocketService.connect('ws://localhost:8080');
+		// this.socketIOService.connect(window.location.origin)
+		this.socketIOService.connect('http://localhost:3000');
+		window.onbeforeunload = () => this.ngOnDestroy();
 	}
 
 	ngOnDestroy() {
-		this.webSocketService.disconnect();
-	}
-
-	sendMessage(message: string) {
-		const messageObject = {
-			type: 'log',
-			data: { text: message }
-		};
-		this.webSocketService.sendMessage(messageObject);
+		this.socketIOService.disconnect();
 	}
 }

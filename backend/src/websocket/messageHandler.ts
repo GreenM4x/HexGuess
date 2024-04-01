@@ -1,14 +1,13 @@
 import {
 	WSMessageType,
 } from '../models/WebSocketModels';
-import WebSocketLogs from './websocket';
+import { SocketIOLogs } from './socket-io';
 
 
-export function handleIncomingMessage(server: WebSocketLogs, message: any, userID: number) {
+export function handleIncomingMessage(server: SocketIOLogs, message: any, socketId: string) {
 	switch (message.type) {
 		case WSMessageType.LOG:
 			console.log(message.data);
-			console.log('userID :>> ', userID);
 			break;
 		default:
 			console.log('Unknown message type:', message.type);
