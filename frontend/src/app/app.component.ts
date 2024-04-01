@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SocketIOService } from './core/services/socket-io.service';
+import { environment } from '../environments/environment';
 
 @Component({
 	selector: 'app-root',
@@ -28,8 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		// this.socketIOService.connect(window.location.origin)
-		this.socketIOService.connect('http://localhost:3000');
+		this.socketIOService.connect(environment.production ? window.location.origin : 'http://localhost:3000');
 		window.onbeforeunload = () => this.ngOnDestroy();
 	}
 
