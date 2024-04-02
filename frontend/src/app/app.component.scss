@@ -19,47 +19,45 @@
 	}
 }
 
-
 .connected-users {
-	position:absolute;
-	top: 0;
+	position: absolute;
+	bottom: 0;
 	border-radius: 8px;
 	padding: 20px;
 	border: 1px solid #393939;
-  
+
 	.header {
-	  display: flex;
-	  align-items: center;
-	  margin-bottom: 5px;
-  
-  
-	  h3 {
-		font-size: 16px;
-		font-weight: bold;
-		color: var(--text-color);
-		margin: 0;
-	  }
-	}
-  
-	.user-list {
-	  padding: 0;
-	  margin: 0;
-	  display: flex;
-	  flex-direction: column;
-	  gap: 5px;
-	  .user-item {
 		display: flex;
-		padding-bottom: 5px;
-		border-bottom: 1px solid #393939;
-  
-		&:last-child {
-		  border-bottom: none;
+		align-items: center;
+		margin-bottom: 5px;
+
+		h3 {
+			font-size: 16px;
+			font-weight: bold;
+			color: var(--text-color);
+			margin: 0;
 		}
-  
-		span {
-		  font-size: 16px;
-		  color: var(--text-color);
-		}
-	  }
 	}
-  } 
+
+	.user-list {
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		.user-item {
+			display: flex;
+			padding-bottom: 5px;
+			border-bottom: 1px solid #393939;
+
+			&:last-child {
+				border-bottom: none;
+			}
+
+			span {
+				font-size: 16px;
+				color: var(--text-color);
+			}
+		}
+	}
+}

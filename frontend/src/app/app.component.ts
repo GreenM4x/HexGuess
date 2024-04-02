@@ -14,7 +14,6 @@ import { environment } from '../environments/environment';
 	imports: [CommonModule, HeaderComponent, RouterOutlet, HttpClientModule],
 })
 export class AppComponent implements OnInit, OnDestroy {
-
 	public isConnected = this.socketIOService.isConnected;
 	public messages = this.socketIOService.messages;
 
@@ -22,14 +21,21 @@ export class AppComponent implements OnInit, OnDestroy {
 		return this.socketIOService.connectedUsers;
 	}
 
-	constructor(private http: HttpClient, private socketIOService: SocketIOService) {
-		this.http.get<{ message: string }>('/api/hello').subscribe((data: { message: string }) => {
-			console.log(data);
-		});
+	constructor(
+		private http: HttpClient,
+		private socketIOService: SocketIOService
+	) {
+		this.http
+			.get<{ message: string }>('/api/hello')
+			.subscribe((data: { message: string }) => {
+				console.log(data);
+			});
 	}
 
 	ngOnInit() {
-		this.socketIOService.connect(environment.production ? window.location.origin : 'http://localhost:3000');
+		this.socketIOService.connect(
+			environment.production ? window.location.origin : 'http://localhost:3000'
+		);
 		window.onbeforeunload = () => this.ngOnDestroy();
 	}
 

@@ -9,6 +9,7 @@ import {
 import { LoginComponent } from './components/login/login.component';
 import { GameBoardComponent } from './components/game-board/game-board.component';
 import { GameSelectComponent } from './components/game-select/game-select.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component.js';
 
 const redirectToLogin = () => redirectUnauthorizedTo(['auth']);
 const redirectLoggedInToGameBoard = () => redirectLoggedInTo(['']);
@@ -27,6 +28,11 @@ const routes: Routes = [
 	{
 		path: 'game/:gameMode',
 		component: GameBoardComponent,
+		...canActivate(redirectToLogin),
+	},
+	{
+		path: 'profile',
+		component: UserProfileComponent,
 		...canActivate(redirectToLogin),
 	},
 ];
