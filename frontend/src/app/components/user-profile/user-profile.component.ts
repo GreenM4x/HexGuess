@@ -23,7 +23,7 @@ export class UserProfileComponent implements OnInit {
 	user: User = {
 		userName: '',
 		imgUrl: 'https://robohash.org/dummy.png',
-		onlineStatus: 'online',
+		onlineStatus: 'offline',
 	};
 
 	friendlist: User[] = [
@@ -35,7 +35,7 @@ export class UserProfileComponent implements OnInit {
 		{
 			userName: 'Felix',
 			imgUrl: 'https://robohash.org/dummy.png',
-			onlineStatus: 'bussy',
+			onlineStatus: 'busy',
 		},
 		{
 			userName: 'Jenny',

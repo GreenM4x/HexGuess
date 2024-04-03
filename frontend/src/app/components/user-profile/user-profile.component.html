@@ -7,14 +7,14 @@
 				[ngClass]="{
 					online: user.onlineStatus === 'online',
 					idle: user.onlineStatus === 'idle',
-					bussy: user.onlineStatus === 'bussy',
+					busy: user.onlineStatus === 'busy',
 					offline: user.onlineStatus === 'offline'
 				}">
 				@switch (user.onlineStatus) {
 					@case ('idle') {
 						<fa-icon [icon]="faMoon"></fa-icon>
 					}
-					@case ('bussy') {
+					@case ('busy') {
 						<fa-icon [icon]="faMinus"></fa-icon>
 					}
 					@case ('offline') {

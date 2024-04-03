@@ -6,6 +6,6 @@ export type User = {
 	stats?: Stats[];
 };
 
-export type OnlineStatus = 'online' | 'idle' | 'bussy' | 'offline';
+export type OnlineStatus = 'online' | 'idle' | 'busy' | 'offline';
 export type Achievements = { name: string; obtained: boolean };
 export type Stats = { name: string; value: number };
