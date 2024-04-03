@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '@core/services/firebase.service.js';
-import { SocketIOService } from '@core/services/socket-io.service.js';
+import { FriendListComponent } from './friend-list/friend-list.component.js';
+import { Firend } from '@shared/models/friendType.js';
 
 @Component({
 	selector: 'app-user-profile',
 	standalone: true,
-	imports: [],
+	imports: [FriendListComponent],
 	templateUrl: './user-profile.component.html',
 	styleUrl: './user-profile.component.scss',
 })
@@ -14,6 +15,13 @@ export class UserProfileComponent implements OnInit {
 
 	userName: string = '';
 	imgUrl: string = 'https://robohash.org/' + this.userName + '.png';
+
+	friendlist: Firend[] = [
+		{ name: 'Lucas', onlineStatus: 'online' },
+		{ name: 'Felix', onlineStatus: 'bussy' },
+		{ name: 'Jenny', onlineStatus: 'offline' },
+		{ name: 'Gabi', onlineStatus: 'idle' },
+	];
 
 	ngOnInit(): void {
 		this.setUserData();

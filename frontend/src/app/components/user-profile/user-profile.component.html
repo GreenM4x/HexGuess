@@ -3,6 +3,27 @@
 		<div class="picture"><img src="{{ imgUrl }}" /></div>
 		<div class="name barcode">{{ userName }}</div>
 	</div>
-	<div class="friendlist"></div>
-	<div class="achievements"></div>
+	<div class="stats">
+		<div class="title">
+			<p class="barcode">stats</p>
+			<p class="firend-count fira">{{ friendlist.length }}</p>
+		</div>
+	</div>
+	<div class="friendlist">
+		<div class="title">
+			<p class="barcode">Friends</p>
+			<p class="firend-count fira">{{ friendlist.length }}</p>
+		</div>
+		<div class="friends">
+			@for (friend of friendlist; track $index) {
+				<app-friend-list [friend]="friend" class="friend"></app-friend-list>
+			}
+		</div>
+	</div>
+	<div class="achievements">
+		<div class="title">
+			<p class="barcode">achievements</p>
+			<p class="firend-count fira">{{ friendlist.length }}</p>
+		</div>
+	</div>
 </div>

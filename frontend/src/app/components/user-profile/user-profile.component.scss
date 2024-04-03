@@ -1,6 +1,8 @@
 .wrapper {
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+
 	height: 100%;
 
 	.profile {
@@ -10,13 +12,12 @@
 		justify-content: center;
 		gap: 35px;
 		height: 300px;
-		background-color: rgba(190, 60, 60, 0);
-		border-bottom: 2px solid var(--secondary-color);
+
 		width: 100%;
 
 		.picture {
 			display: flex;
-			background-color: var(--secondary-color);
+			background-color: var(--primary-color);
 			height: 125px;
 			width: 125px;
 			border-radius: 100%;
@@ -31,5 +32,46 @@
 			color: white;
 			font-size: 3rem;
 		}
+	}
+	.stats {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+	}
+
+	.friendlist {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+
+		.friends {
+			overflow-x: scroll;
+			display: flex;
+			gap: 20px;
+			padding: 20px;
+		}
+	}
+
+	.achievements {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+	}
+}
+
+.title {
+	background-color: var(--secondary-color);
+	padding: 16px;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	border-bottom: 1px solid var(--background-color);
+	p {
+		color: var(--text-color);
+		font-size: 2rem;
+	}
+	.firend-count {
+		font-size: 1.2rem;
+		opacity: 0.4;
 	}
 }

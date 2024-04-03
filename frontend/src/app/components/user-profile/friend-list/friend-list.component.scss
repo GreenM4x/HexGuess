@@ -1,0 +1,55 @@
+.friend-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.picture {
+		position: relative;
+		background-color: var(--primary-color);
+		border-radius: 100%;
+		width: 90px;
+		height: 90px;
+		aspect-ratio: 1;
+		img {
+			height: 100%;
+			width: 100%;
+			border-radius: 100%;
+		}
+	}
+	.name {
+		color: var(--text-color);
+	}
+	.status {
+		position: absolute;
+		bottom: 7px;
+		right: 0px;
+
+		width: 25px;
+		height: 25px;
+		background-color: var(--primary-color);
+		outline: 5px solid var(--background-color);
+		border-radius: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		fa-icon {
+		}
+
+		&.online {
+			background-color: var(--online-color);
+		}
+
+		&.idle {
+			background-color: var(--idle-color);
+		}
+
+		&.bussy {
+			background-color: var(--bussy-color);
+		}
+
+		&.offline {
+			background-color: var(--offline-color);
+		}
+	}
+}

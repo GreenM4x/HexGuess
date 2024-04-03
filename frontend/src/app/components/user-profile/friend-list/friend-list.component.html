@@ -1,0 +1,28 @@
+<div class="friend-container">
+	<div class="picture">
+		<img src="{{ imgUrl }}" />
+		<div
+			class="status"
+			[ngClass]="{
+				online: friend.onlineStatus === 'online',
+				idle: friend.onlineStatus === 'idle',
+				bussy: friend.onlineStatus === 'bussy',
+				offline: friend.onlineStatus === 'offline'
+			}"
+			(click)="removeFriend()">
+			@if (friend.onlineStatus === 'idle') {
+				<fa-icon [icon]="faMoon"></fa-icon>
+			}
+			@if (friend.onlineStatus === 'bussy') {
+				<fa-icon [icon]="faMinus"></fa-icon>
+			}
+			@if (friend.onlineStatus === 'offline') {
+				<fa-icon [icon]="faXmark"></fa-icon>
+			}
+		</div>
+	</div>
+
+	<div class="name fira">
+		<p>{{ friend.name }}</p>
+	</div>
+</div>
