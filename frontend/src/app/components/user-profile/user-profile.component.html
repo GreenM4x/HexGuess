@@ -29,6 +29,11 @@
 		<div class="title">
 			<p class="barcode">stats</p>
 		</div>
+		<div class="stats-display">
+			@for (stat of user.stats; track $index) {
+				<app-stats [stat]="stat" class="stat"></app-stats>
+			}
+		</div>
 	</div>
 	<div class="friendlist">
 		<div class="title">

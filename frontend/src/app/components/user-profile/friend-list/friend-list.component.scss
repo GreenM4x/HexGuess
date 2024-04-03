@@ -5,7 +5,11 @@
 
 	.picture {
 		position: relative;
-		background-color: var(--primary-color);
+		background: linear-gradient(
+			45deg,
+			var(--text-color) 0%,
+			var(--primary-color) 100%
+		);
 		border-radius: 100%;
 		width: 90px;
 		height: 90px;
