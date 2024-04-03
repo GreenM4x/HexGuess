@@ -16,6 +16,7 @@
 		width: 100%;
 
 		.picture {
+			position: relative;
 			display: flex;
 			background-color: var(--primary-color);
 			height: 125px;
@@ -26,6 +27,36 @@
 				height: 100%;
 
 				border-radius: 100%;
+			}
+			.status {
+				position: absolute;
+				bottom: 7px;
+				right: 0px;
+
+				width: 25px;
+				height: 25px;
+				background-color: var(--primary-color);
+				outline: 5px solid var(--background-color);
+				border-radius: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				&.online {
+					background-color: var(--online-color);
+				}
+
+				&.idle {
+					background-color: var(--idle-color);
+				}
+
+				&.bussy {
+					background-color: var(--bussy-color);
+				}
+
+				&.offline {
+					background-color: var(--offline-color);
+				}
 			}
 		}
 		.name {

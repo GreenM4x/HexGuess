@@ -9,7 +9,7 @@ import {
 	faStar,
 	faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { Firend } from '@shared/models/friendType.js';
+import { User } from '@shared/models/UserType.js';
 
 @Component({
 	selector: 'app-friend-list',
@@ -19,18 +19,17 @@ import { Firend } from '@shared/models/friendType.js';
 	styleUrl: './friend-list.component.scss',
 })
 export class FriendListComponent implements OnInit {
-	@Input() friend: Firend;
-	imgUrl: string = '';
+	@Input() user: User;
 
 	faXmark = faXmark;
 	faMinus = faMinus;
 	faMoon = faMoon;
 
 	ngOnInit(): void {
-		this.imgUrl = 'https://robohash.org/' + this.friend.name + '.png';
+		this.user.imgUrl = 'https://robohash.org/' + this.user.userName + '.png';
 	}
 
 	removeFriend(): void {
-		alert('Removed:' + this.friend.name);
+		alert('Removed:' + this.user.userName);
 	}
 }

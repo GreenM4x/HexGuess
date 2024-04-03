@@ -1,12 +1,33 @@
 <div class="wrapper">
 	<div class="profile">
-		<div class="picture"><img src="{{ imgUrl }}" /></div>
-		<div class="name barcode">{{ userName }}</div>
+		<div class="picture">
+			<img src="{{ user.imgUrl }}" />
+			<div
+				class="status"
+				[ngClass]="{
+					online: user.onlineStatus === 'online',
+					idle: user.onlineStatus === 'idle',
+					bussy: user.onlineStatus === 'bussy',
+					offline: user.onlineStatus === 'offline'
+				}">
+				@switch (user.onlineStatus) {
+					@case ('idle') {
+						<fa-icon [icon]="faMoon"></fa-icon>
+					}
+					@case ('bussy') {
+						<fa-icon [icon]="faMinus"></fa-icon>
+					}
+					@case ('offline') {
+						<fa-icon [icon]="faXmark"></fa-icon>
+					}
+				}
+			</div>
+		</div>
+		<div class="name barcode">{{ user.userName }}</div>
 	</div>
 	<div class="stats">
 		<div class="title">
 			<p class="barcode">stats</p>
-			<p class="firend-count fira">{{ friendlist.length }}</p>
 		</div>
 	</div>
 	<div class="friendlist">
@@ -16,7 +37,7 @@
 		</div>
 		<div class="friends">
 			@for (friend of friendlist; track $index) {
-				<app-friend-list [friend]="friend" class="friend"></app-friend-list>
+				<app-friend-list [user]="friend" class="friend"></app-friend-list>
 			}
 		</div>
 	</div>

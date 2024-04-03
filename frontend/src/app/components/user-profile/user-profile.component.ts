@@ -1,26 +1,52 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '@core/services/firebase.service.js';
 import { FriendListComponent } from './friend-list/friend-list.component.js';
-import { Firend } from '@shared/models/friendType.js';
+import { User } from '@shared/models/UserType.js';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faMinus, faMoon, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'app-user-profile',
 	standalone: true,
-	imports: [FriendListComponent],
+	imports: [FriendListComponent, CommonModule, FontAwesomeModule],
 	templateUrl: './user-profile.component.html',
 	styleUrl: './user-profile.component.scss',
 })
 export class UserProfileComponent implements OnInit {
 	constructor(private firebaseService: FirebaseService) {}
 
-	userName: string = '';
-	imgUrl: string = 'https://robohash.org/' + this.userName + '.png';
+	faXmark = faXmark;
+	faMinus = faMinus;
+	faMoon = faMoon;
 
-	friendlist: Firend[] = [
-		{ name: 'Lucas', onlineStatus: 'online' },
-		{ name: 'Felix', onlineStatus: 'bussy' },
-		{ name: 'Jenny', onlineStatus: 'offline' },
-		{ name: 'Gabi', onlineStatus: 'idle' },
+	user: User = {
+		userName: '',
+		imgUrl: 'https://robohash.org/dummy.png',
+		onlineStatus: 'online',
+	};
+
+	friendlist: User[] = [
+		{
+			userName: 'Lucas',
+			imgUrl: 'https://robohash.org/dummy.png',
+			onlineStatus: 'online',
+		},
+		{
+			userName: 'Felix',
+			imgUrl: 'https://robohash.org/dummy.png',
+			onlineStatus: 'bussy',
+		},
+		{
+			userName: 'Jenny',
+			imgUrl: 'https://robohash.org/dummy.png',
+			onlineStatus: 'offline',
+		},
+		{
+			userName: 'Gabi',
+			imgUrl: 'https://robohash.org/dummy.png',
+			onlineStatus: 'idle',
+		},
 	];
 
 	ngOnInit(): void {
@@ -38,8 +64,9 @@ export class UserProfileComponent implements OnInit {
 					userName = await this.firebaseService.getUsernameFromUserId(userId);
 				}
 
-				this.userName = userName;
-				this.imgUrl = 'https://robohash.org/' + this.userName + '.png';
+				this.user.userName = userName;
+				this.user.imgUrl =
+					'https://robohash.org/' + this.user.userName + '.png';
 			},
 		});
 	}
