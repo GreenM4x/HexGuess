@@ -5,6 +5,8 @@ interface ConnectedUser {
     userId: string;
     username: string;
     sessionId?: string;
+    updatedAt: number;
+    clientCount: number;
 }
 
 export default class SocketIOLogs {
@@ -21,27 +23,39 @@ export default class SocketIOLogs {
             },
             path: '/api/ws',
         });
-        console.log(process.env.ENV);
         this.io.on('connection', this.connection.bind(this));
     }
 
     connection(socket: Socket) {
         console.log(`🤖 Socket.IO connected`);
-
-        socket.on('user_connect', (connectedUser: ConnectedUser) => {
-            this.connectedUsers.push(connectedUser);
-            this.io.emit('user_update', this.connectedUsers);
-            console.log(`➕ User ${connectedUser.username} connected`);
+        socket.emit('initial_sync', this.connectedUsers); 
+        socket.on('user_connect', async (connectedUser: ConnectedUser) => {
+            connectedUser.updatedAt = Date.now();
+            if(!connectedUser.clientCount) {
+                connectedUser.clientCount = 1;
+                console.log(`➕ User ${connectedUser.username} connected`);
+            } else {
+                connectedUser.clientCount++;
+                console.log(`🔄 User ${connectedUser.username} has now ${connectedUser.clientCount} clients`);
+            }
+            this.syncConnectedUsers(connectedUser);
         });
 
-        socket.on('user_disconnect', (user: ConnectedUser) => {
-            this.connectedUsers = this.connectedUsers.filter((connectedUser) => connectedUser.sessionId !== user.sessionId);
-            this.io.emit('user_update', this.connectedUsers);
-            console.log(`➖ User ${user.username} disconnected`);
+        socket.on('user_disconnect', (connectedUser: ConnectedUser) => {
+            const disconnectedUser = this.connectedUsers.find((user) => user.username === connectedUser?.username);
+            if (disconnectedUser) {
+                disconnectedUser.clientCount--;
+                if (disconnectedUser.clientCount === 0) {
+                    this.connectedUsers = this.connectedUsers.filter((user) => user.username !== connectedUser.username);
+                    this.io.emit('user_update', this.connectedUsers);
+                    console.log(`➖ User ${disconnectedUser.username} disconnected`);
+                } else {
+                    this.syncConnectedUsers(disconnectedUser);
+                }
+            }
         });
 
         socket.on('message', (data: any) => {
-            console.log('data :>> ', data);
             handleIncomingMessage(this, data, socket.id);
         });
 
@@ -53,4 +67,20 @@ export default class SocketIOLogs {
     sendMessage(data: any, event: string) {
         this.io.emit(event, data);
     }
+
+    private syncConnectedUsers(user: ConnectedUser) {
+        const userIndex = this.connectedUsers.findIndex((u) => u.username === user.username);
+        if (userIndex !== -1) {
+            const existingUser = this.connectedUsers[userIndex];
+            if (user.updatedAt > existingUser.updatedAt) {
+                this.connectedUsers[userIndex] = user;
+                this.io.emit('user_update', this.connectedUsers);
+            }
+        } else {
+            this.connectedUsers.push(user);
+            this.io.emit('user_update', this.connectedUsers);
+        }
+    }
+
+
 }
