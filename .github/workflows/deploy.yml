@@ -77,7 +77,16 @@ jobs:
         with:
           images: ${{ matrix.image }}
 
-      - name: Build and push Hexguess Server images 🛠️
+      - name: Check for changes in ${{ matrix.name }} directory
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.event.after }} -- ${{ matrix.path }}; then
+            echo "${{ matrix.name }}_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "${{ matrix.name }}_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build and push ${{ matrix.name }} images 🛠️
+        if: steps.check-${{ matrix.name }}-changes.outputs.${{ matrix.name }}_changed == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ${{ matrix.path }}
@@ -107,6 +116,22 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for changes in backend directory
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.event.after }} -- backend; then
+            echo "backend_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "backend_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check for changes in frontend directory
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.event.after }} -- frontend; then
+            echo "frontend_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "frontend_changed=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Pull latest server image
         run: |
