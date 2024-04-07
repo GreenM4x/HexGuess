@@ -16,3 +16,14 @@
 		</div>
 	</ul>
 </div>
+
+
+<dialog #dialog id="dialog" >
+	<div class="content fira">
+		<p>A new app version is available. Refresh?</p>
+		<footer>
+			<button (click)="dialog.close()">Close</button>
+			<button autofocus (click)="reloadPage()">Refresh</button>
+		</footer>
+	</div>
+</dialog>
