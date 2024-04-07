@@ -3,7 +3,7 @@ import SocketIOLogs from "./socket-io.js";
 
 
 
-export function handleIncomingMessage(server: SocketIOLogs, message: any, socketId: string) {
+export function handleIncomingMessage(server: SocketIOLogs, message: any) {
 	switch (message.type) {
 		case WSMessageType.LOG:
 			console.log(message.data);
