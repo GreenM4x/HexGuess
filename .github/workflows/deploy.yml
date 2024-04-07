@@ -1,4 +1,3 @@
-# https://pabluc.medium.com/raspberrypi-github-actions-ci-cd-1dc098b4c7d3
 name: Unstable release
 
 concurrency:
@@ -7,8 +6,6 @@ concurrency:
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
     branches: ["main"]
   workflow_dispatch:
     inputs:
@@ -47,16 +44,7 @@ jobs:
       - name: Checkout ⬇️
         uses: actions/checkout@v3
         with:
-          fetch-depth: ${{ github.event_name == 'pull_request' && 2 || 0 }}
-
-      - name: Get changed files
-        id: changed-files
-        run: |
-          if ${{ github.event_name == 'pull_request' }}; then
-            echo "changed_files=$(git diff --name-only -r HEAD^1 HEAD | xargs)" >> $GITHUB_OUTPUT
-          else
-            echo "changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | xargs)" >> $GITHUB_OUTPUT
-          fi
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Get current date ⌛
         id: date
@@ -88,8 +76,7 @@ jobs:
         with:
           images: ${{ matrix.image }}
 
-      - name: Build and push ${{ matrix.name }} images 🛠️
-        if: contains(steps.changed-files.outputs.changed_files, ${{ matrix.path }})
+      - name: Build and push Hexguess Server images 🛠️
         uses: docker/build-push-action@v5
         with:
           context: ${{ matrix.path }}
@@ -121,7 +108,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull latest server image
-        if: contains(steps.changed-files.outputs.changed_files, './backend')
         run: |
           if [ "${{ github.event_name == 'push' && github.ref_name == 'main' }}" = "true" ]; then
             docker pull ${{ env.SERVER_IMAGE }}:latest
@@ -130,7 +116,6 @@ jobs:
           fi
 
       - name: Pull latest web image
-        if: contains(steps.changed-files.outputs.changed_files, './frontend')
         run: |
           if [ "${{ github.event_name == 'push' && github.ref_name == 'main' }}" = "true" ]; then
             docker pull ${{ env.WEB_IMAGE }}:latest
