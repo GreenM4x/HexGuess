@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -13,8 +13,7 @@ import { environment } from '../environments/environment';
 	standalone: true,
 	imports: [CommonModule, HeaderComponent, RouterOutlet, HttpClientModule],
 })
-export class AppComponent implements OnInit, OnDestroy {
-
+export class AppComponent implements OnInit {
 	public isConnected = this.socketIOService.isConnected;
 	public messages = this.socketIOService.messages;
 
@@ -22,18 +21,20 @@ export class AppComponent implements OnInit, OnDestroy {
 		return this.socketIOService.connectedUsers;
 	}
 
-	constructor(private http: HttpClient, private socketIOService: SocketIOService) {
-		this.http.get<{ message: string }>('/api/hello').subscribe((data: { message: string }) => {
-			console.log(data);
-		});
+	constructor(
+		private http: HttpClient,
+		private socketIOService: SocketIOService
+	) {
+		this.http
+			.get<{ message: string }>('/api/hello')
+			.subscribe((data: { message: string }) => {
+				console.log(data);
+			});
 	}
 
 	ngOnInit() {
-		this.socketIOService.connect(environment.production ? window.location.origin : 'http://localhost:3000');
-		window.onbeforeunload = () => this.ngOnDestroy();
-	}
-
-	ngOnDestroy() {
-		this.socketIOService.disconnect();
+		this.socketIOService.connect(
+			environment.production ? window.location.origin : 'http://localhost:3000'
+		);
 	}
 }

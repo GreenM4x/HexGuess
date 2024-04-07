@@ -10,8 +10,9 @@
 		<h3>Connected Users</h3>
 	</div>
 	<ul class="user-list">
-		<li *ngFor="let user of connectedUsers()" class="user-item">
-			<span>{{ user.username }}</span>
-		</li>
+		<div *ngFor="let user of connectedUsers()" class="user-item">
+			<p class="username">{{ user.username }}</p>
+			<p class="session-id">{{ user.sessionId }}</p>
+		</div>
 	</ul>
 </div>
