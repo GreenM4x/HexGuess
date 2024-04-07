@@ -8,7 +8,6 @@ interface ConnectedUser {
 	userId: string;
 	username: string;
 	sessionId?: string;
-	updatedAt?: number;
 	clientCount?: number;
 }
 @Injectable({

@@ -5,7 +5,6 @@ interface ConnectedUser {
 	userId: string;
 	username: string;
 	sessionId?: string;
-	updatedAt: number;
 }
 
 export default class SocketIOLogs {
@@ -57,7 +56,6 @@ export default class SocketIOLogs {
 
 	private async updatedConnectedUsers(disconnectOld: boolean = false) {
 		const allSockets = await this.io.fetchSockets();
-		// const allSessions = allSockets.map((socket) => socket.id);
 		allSockets.forEach((socket) => {
 			const connectedUser = this.connectedUsers.find((user) => user.sessionId === socket.id);
 			if (!connectedUser) {
@@ -65,7 +63,6 @@ export default class SocketIOLogs {
 					userId: '',
 					username: '',
 					sessionId: socket.id,
-					updatedAt: Date.now(),
 				});
 			}
 
