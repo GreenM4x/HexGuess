@@ -8,14 +8,5 @@
       "regex": "backend/.*",
       "color": "#3c536e"
     }
-  ],
-  "colorTabs.ignoreCase": true,
-  "colorTabs.tabBackground": true,
-  "typescript.preferences.importModuleSpecifierEnding": "js",
-  "workbench.colorCustomizations": {
-    "tab.activeBorder": "#ae00ff49",
-    "tab.activeBackground": "#ae00ff49",
-    "statusBar.background": "#ae00ff49",
-    "statusBar.foreground": "#000000"
-  }
+  ]
 }
