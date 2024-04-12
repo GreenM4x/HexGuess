@@ -3,21 +3,25 @@ import { CommonModule } from '@angular/common';
 import { FirebaseService } from '@core/services/firebase.service';
 import { Observable } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { GameStateService } from '../../../core/services/game-state.service';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
 	selector: 'app-header',
 	templateUrl: './header.component.html',
 	styleUrls: ['./header.component.scss'],
 	standalone: true,
-	imports: [CommonModule, FontAwesomeModule],
+	imports: [CommonModule, FontAwesomeModule, RouterModule],
 })
 export class HeaderComponent implements OnInit {
 	isLoggedIn: Observable<boolean> = new Observable<boolean>();
+	isInUserProfile: boolean = false;
+
 	faChevronLeft = faChevronLeft;
 	faRightFromBracket = faRightFromBracket;
+	faUser = faUser;
 
 	public get gameIsActive() {
 		return this.gameStateService?.getCurrentGame;
@@ -25,7 +29,8 @@ export class HeaderComponent implements OnInit {
 
 	constructor(
 		private fbService: FirebaseService,
-		private gameStateService: GameStateService
+		private gameStateService: GameStateService,
+		public router: Router
 	) {}
 
 	ngOnInit(): void {
@@ -38,5 +43,11 @@ export class HeaderComponent implements OnInit {
 
 	back() {
 		window.history.back();
+		this.isInUserProfile = false;
+	}
+
+	goToUserProfile() {
+		this.router.navigate(['profile']);
+		this.isInUserProfile = true;
 	}
 }

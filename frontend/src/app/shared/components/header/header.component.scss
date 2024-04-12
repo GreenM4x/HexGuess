@@ -3,38 +3,43 @@
 	height: 6rem;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-evenly;
+
 	color: var(--text-color);
 	span {
 		color: var(--primary-color);
 	}
 
 	.navigation {
-		position: absolute;
-		top: 25px;
 		display: flex;
-		justify-content: space-between;
-		width: 100%;
-		height: 5%;
-		padding: 0 2rem;
+		justify-content: center;
+		align-items: center;
+		width: 25%;
+	}
+	.title {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 50%;
+	}
+	.profile {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 25%;
+	}
+	.btn {
+		cursor: pointer;
+		background-color: var(--secondary-color);
+		border: none;
+		border-radius: 100%;
+		height: 35px;
+		width: 35px;
 
-		.btn {
-			cursor: pointer;
-			background-color: var(--secondary-color);
-			border: none;
-			border-radius: 100%;
-			height: 35px;
-			width: 35px;
+		color: white;
 
-			color: white;
-
-			&:hover {
-				transform: scale(110%);
-			}
-
-			&.logout-btn {
-				margin-left: auto;
-			}
+		&:hover {
+			transform: scale(110%);
 		}
 	}
 }

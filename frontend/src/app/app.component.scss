@@ -3,7 +3,6 @@ $text-color: var(--text-color);
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
 }
 
@@ -75,12 +74,12 @@ dialog {
 	border: none;
 	border-radius: 5px;
 	width: 345px;
-    min-height: 100px;
-    padding: 20px;
+	min-height: 100px;
+	padding: 20px;
 	background-color: rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(10px);
 	margin: 0 auto;
-    top: 5%;
+	top: 5%;
 	.content {
 		display: flex;
 		flex-direction: column;
