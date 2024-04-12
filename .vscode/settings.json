@@ -8,5 +8,8 @@
       "regex": "backend/.*",
       "color": "#3c536e"
     }
-  ]
+  ],
+  "colorTabs.ignoreCase": true,
+  "colorTabs.tabBackground": true,
+  "typescript.preferences.importModuleSpecifierEnding": "js"
 }
