@@ -7,6 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMinus, faMoon, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 import { StatsComponent } from './stats/stats.component.js';
+import { AchievementComponent } from './achievement/achievement.component.js';
 
 @Component({
 	selector: 'app-user-profile',
@@ -16,6 +17,7 @@ import { StatsComponent } from './stats/stats.component.js';
 		CommonModule,
 		FontAwesomeModule,
 		StatsComponent,
+		AchievementComponent,
 	],
 	templateUrl: './user-profile.component.html',
 	styleUrl: './user-profile.component.scss',
@@ -37,9 +39,17 @@ export class UserProfileComponent implements OnInit {
 			{ name: 'hightscore_top10', value: 445 },
 		],
 		achievements: [
-			{ name: 'Beeing cool', obtained: true },
-			{ name: 'win_1000_games', obtained: false },
-			{ name: 'over9000', obtained: true },
+			{ name: 'beeing_cool', description: 'Beeing called Max', obtained: true },
+			{
+				name: 'win_1000_games',
+				description: 'Win 1000 online Games lol',
+				obtained: false,
+			},
+			{
+				name: 'over9000',
+				description: 'Get a highscore of 9000 or more in Infinite',
+				obtained: true,
+			},
 		],
 	};
 
@@ -86,5 +96,10 @@ export class UserProfileComponent implements OnInit {
 					'https://robohash.org/' + this.user.userName + '.png';
 			},
 		});
+	}
+
+	achievementsObtainedCount(): number {
+		return this.user.achievements.filter(achivement => achivement.obtained)
+			.length;
 	}
 }

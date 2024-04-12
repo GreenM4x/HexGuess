@@ -46,10 +46,17 @@
 			}
 		</div>
 	</div>
-	<div class="achievements">
+	<div class="achievementlist">
 		<div class="title">
 			<p class="barcode">achievements</p>
-			<p class="firend-count fira">{{ friendlist.length }}</p>
+			<p class="firend-count fira">{{ achievementsObtainedCount() }}</p>
+		</div>
+		<div class="achievements">
+			@for (achievement of user.achievements; track $index) {
+				<app-achievement
+					[achievement]="achievement"
+					class="achievement"></app-achievement>
+			}
 		</div>
 	</div>
 </div>

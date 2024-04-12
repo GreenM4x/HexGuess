@@ -1,14 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-	faGlobe,
-	faMinus,
-	faMoon,
-	faRobot,
-	faStar,
-	faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faMoon, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { User } from '@shared/models/UserType.js';
 
 @Component({

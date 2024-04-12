@@ -7,5 +7,9 @@ export type User = {
 };
 
 export type OnlineStatus = 'online' | 'idle' | 'busy' | 'offline';
-export type Achievements = { name: string; obtained: boolean };
+export type Achievements = {
+	name: string;
+	description: string;
+	obtained: boolean;
+};
 export type Stats = { name: string; value: number };
