@@ -10,8 +10,20 @@
 		<h3>Connected Users</h3>
 	</div>
 	<ul class="user-list">
-		<li *ngFor="let user of connectedUsers()" class="user-item">
-			<span>{{ user }}</span>
-		</li>
+		<div *ngFor="let user of connectedUsers()" class="user-item">
+			<p class="username">{{ user.username }}</p>
+			<p class="session-id">{{ user.sessionId }}</p>
+		</div>
 	</ul>
 </div>
+
+
+<dialog #dialog id="dialog" >
+	<div class="content fira">
+		<p>A new app version is available. Refresh?</p>
+		<footer>
+			<button (click)="dialog.close()">Close</button>
+			<button autofocus (click)="reloadPage()">Refresh</button>
+		</footer>
+	</div>
+</dialog>

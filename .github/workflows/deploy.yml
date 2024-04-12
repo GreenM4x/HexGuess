@@ -1,4 +1,3 @@
-# https://pabluc.medium.com/raspberrypi-github-actions-ci-cd-1dc098b4c7d3
 name: Unstable release
 
 concurrency:
