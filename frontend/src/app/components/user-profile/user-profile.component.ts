@@ -39,7 +39,7 @@ export class UserProfileComponent implements OnInit {
 			{ name: 'hightscore_top10', value: 445 },
 		],
 		achievements: [
-			{ name: 'beeing_cool', description: 'Beeing called Max', obtained: true },
+			{ name: 'beeing_cool', description: 'Beeing called M4x', obtained: true },
 			{
 				name: 'win_1000_games',
 				description: 'Win 1000 online Games lol',
@@ -55,22 +55,22 @@ export class UserProfileComponent implements OnInit {
 
 	friendlist: User[] = [
 		{
-			userName: 'Lucas',
+			userName: 'Friend_01',
 			imgUrl: 'https://robohash.org/dummy.png',
 			onlineStatus: 'online',
 		},
 		{
-			userName: 'Felix',
+			userName: 'Friend_02',
 			imgUrl: 'https://robohash.org/dummy.png',
 			onlineStatus: 'busy',
 		},
 		{
-			userName: 'Jenny',
+			userName: 'Friend_03',
 			imgUrl: 'https://robohash.org/dummy.png',
 			onlineStatus: 'offline',
 		},
 		{
-			userName: 'Gabi',
+			userName: 'Friend_04',
 			imgUrl: 'https://robohash.org/dummy.png',
 			onlineStatus: 'idle',
 		},
