@@ -76,7 +76,7 @@ jobs:
         with:
           images: ${{ matrix.image }}
 
-      - name: Build and push Hexguess Server images 🛠️
+      - name: Build and push Hexguess images 🛠️
         uses: docker/build-push-action@v5
         with:
           context: ${{ matrix.path }}
