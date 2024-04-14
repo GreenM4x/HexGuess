@@ -1,5 +1,9 @@
 name: PR Preview Deployment
 
+concurrency:
+    group: ${{ github.ref }}
+    cancel-in-progress: true
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -27,6 +31,11 @@ jobs:
             image: ghcr.io/greenm4x/hexguess-web
             path: ./frontend
             name: frontend
+    name: Build & deploy PR preview for ${{ matrix.name }} 🚀
+    permissions:
+        contents: read
+        packages: write
+
     steps:
       - name: Checkout ⬇️
         uses: actions/checkout@v3
