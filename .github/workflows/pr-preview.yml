@@ -89,9 +89,21 @@ jobs:
         run: |
           echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
 
+      - name: Remove old frontend image
+        run: docker rmi ${{env.WEB_IMAGE}}:pr-${{ github.event.pull_request.number }} || true  # Ignore errors if image does not exist
+        
+      - name: Pull latest frontend image
+        run: docker pull ${{env.WEB_IMAGE}}:pr-${{ github.event.pull_request.number }}
+
+      - name: Remove old backend image
+        run: docker rmi ${{env.SERVER_IMAGE}}:pr-${{ github.event.pull_request.number }} || true  # Ignore errors if image does not exist
+
+      - name: Pull latest backend image
+        run: docker pull ${{env.SERVER_IMAGE}}:pr-${{ github.event.pull_request.number }}
+      
       - name: Deploy PR Preview
         run: |
-          docker compose -f docker-compose.pr.yml -p pr-${{ github.event.pull_request.number }} up -d --build
+          docker compose -f docker-compose.pr.yml -p pr-${{ github.event.pull_request.number }} up -d --force-recreate --build
 
   cleanup:
     runs-on: self-hosted
