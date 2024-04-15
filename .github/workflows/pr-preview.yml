@@ -64,7 +64,6 @@ jobs:
         with:
           context: ${{ matrix.path }}
           file: ${{ matrix.dockerfile }}
-          build-args: BASE_HREF=/pr-${{ github.event.pull_request.number }}/
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64

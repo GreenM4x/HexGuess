@@ -11,11 +11,8 @@ RUN npm install --no-audit
 # Copy the rest of the application code
 COPY . /app
 
-# Introduce a build argument for the base href
-ARG BASE_HREF=/
-RUN echo "Building with base href: ${BASE_HREF}"
 # Build the application with dynamic base href
-RUN npm run build -- --base-href=${BASE_HREF}
+RUN npm run build
 RUN rm -rf node_modules
 
 # Stage 2 - build the final image and copy the Angular build files

@@ -20,7 +20,7 @@ bootstrapApplication(AppComponent, {
 			BrowserModule,
 			AppRoutingModule,
 			ServiceWorkerModule.register('ngsw-worker.js', {
-				enabled: false,
+				enabled: !isDevMode(),
 				registrationStrategy: 'registerImmediately',
 			}),
 			AngularFireModule.initializeApp(environment.firebase),
