@@ -9,6 +9,8 @@ services:
       traefik.enable: true
       traefik.http.routers.hexguess-web-pr-${PR_NUMBER}.entrypoints: https
       traefik.http.routers.hexguess-web-pr-${PR_NUMBER}.rule: Host(`hexguess.kellerkind.dev`) && PathPrefix(`/pr-${PR_NUMBER}`)
+      traefik.http.middlewares.strip-pr-prefix.stripprefix.prefixes: "/pr-${PR_NUMBER}"
+      traefik.http.routers.hexguess-web-pr-${PR_NUMBER}.middlewares: "strip-pr-prefix"
       traefik.http.services.hexguess-web-pr-${PR_NUMBER}.loadbalancer.server.port: 3000
     networks:
       - web
