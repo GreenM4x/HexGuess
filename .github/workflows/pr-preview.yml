@@ -62,6 +62,7 @@ jobs:
     permissions:
         contents: read
         packages: write
+        pull-requests: write
 
     steps:
       - name: Checkout ⬇️
@@ -95,6 +96,20 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64
           push: true
+      
+      - name: Handle Build Failure
+        if: failure()
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const comment_id = ${{ needs.start-comment.outputs.comment_id }};
+            await github.rest.issues.updateComment({
+              ...context.repo,
+              comment_id,
+              body: '⚠️ Build failed! Unable to prepare your PR preview. Please check the logs.'
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-preview:
     runs-on: self-hosted # Raspberry Pi
@@ -135,6 +150,20 @@ jobs:
       - name: Deploy PR Preview
         run: |
           docker compose -f docker-compose.pr.yml -p pr-${{ github.event.pull_request.number }} up -d --force-recreate --build
+
+      - name: Handle Deployment Failure
+        if: failure()
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const comment_id = ${{ needs.docker-build-and-push.outputs.comment_id }};
+            await github.rest.issues.updateComment({
+              ...context.repo,
+              comment_id,
+              body: `⚠️ Deployment failed! Your PR preview is not available 😕 Please check the logs.`
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Update Comment with Preview URL
         uses: actions/github-script@v5
