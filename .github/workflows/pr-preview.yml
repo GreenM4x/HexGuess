@@ -124,7 +124,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const comment_id = ${{ needs.docker-build-and-push.outputs.comment_id}};;
+            const comment_id = ${{ needs.docker-build-and-push.outputs.comment_id}};
             const preview_url = `https://hexguess-preview-${{ github.event.pull_request.number }}.kellerkind.dev`;
             await github.rest.issues.updateComment({
               ...context.repo,
