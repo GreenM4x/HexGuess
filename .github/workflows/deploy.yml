@@ -88,6 +88,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64
           push: true
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
 
   run-on-pi:
     runs-on: self-hosted # Raspberry Pi
