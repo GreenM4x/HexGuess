@@ -108,7 +108,7 @@ jobs:
             await github.rest.issues.updateComment({
               ...context.repo,
               comment_id,
-              body: '⚠️ Build failed! Unable to prepare your PR preview. Please check the logs.'
+              body: '⚠️ Build failed! Unable to prepare your PR preview. Please be better and check the logs.'
             });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
