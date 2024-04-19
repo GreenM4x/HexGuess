@@ -1,0 +1,11 @@
+<div class="stat-wrapper" [ngClass]="{ obtained: achievement.obtained }">
+	<div class="icon-container">
+		<div class="icon fira"><fa-icon [icon]="faTrophy"></fa-icon></div>
+	</div>
+	<div class="text">
+		<p class="title fira">{{ achievement.name }}</p>
+		@if (achievement.obtained) {
+			<p class="sub-title fira">{{ achievement.description }}</p>
+		}
+	</div>
+</div>

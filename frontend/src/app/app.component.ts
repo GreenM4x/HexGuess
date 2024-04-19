@@ -15,7 +15,7 @@ import { ServiceWorkerUpdateService } from './core/services/worker-update.servic
 	imports: [CommonModule, HeaderComponent, RouterOutlet, HttpClientModule],
 })
 export class AppComponent implements OnInit {
-	@ViewChild('dialog', {static: true}) dialog: ElementRef<HTMLDialogElement>;
+	@ViewChild('dialog', { static: true }) dialog: ElementRef<HTMLDialogElement>;
 	public isConnected = this.socketIOService.isConnected;
 	public messages = this.socketIOService.messages;
 

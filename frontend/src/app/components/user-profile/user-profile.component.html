@@ -1,0 +1,62 @@
+<div class="wrapper">
+	<div class="profile">
+		<div class="picture">
+			<img src="{{ user.imgUrl }}" />
+			<div
+				class="status"
+				[ngClass]="{
+					online: user.onlineStatus === 'online',
+					idle: user.onlineStatus === 'idle',
+					busy: user.onlineStatus === 'busy',
+					offline: user.onlineStatus === 'offline'
+				}">
+				@switch (user.onlineStatus) {
+					@case ('idle') {
+						<fa-icon [icon]="faMoon"></fa-icon>
+					}
+					@case ('busy') {
+						<fa-icon [icon]="faMinus"></fa-icon>
+					}
+					@case ('offline') {
+						<fa-icon [icon]="faXmark"></fa-icon>
+					}
+				}
+			</div>
+		</div>
+		<div class="name barcode">{{ user.userName }}</div>
+	</div>
+	<div class="stats">
+		<div class="title">
+			<p class="barcode">stats</p>
+		</div>
+		<div class="stats-display">
+			@for (stat of user.stats; track $index) {
+				<app-stats [stat]="stat" class="stat"></app-stats>
+			}
+		</div>
+	</div>
+	<div class="friendlist">
+		<div class="title">
+			<p class="barcode">Friends</p>
+			<p class="firend-count fira">{{ friendlist.length }}</p>
+		</div>
+		<div class="friends">
+			@for (friend of friendlist; track $index) {
+				<app-friend-list [user]="friend" class="friend"></app-friend-list>
+			}
+		</div>
+	</div>
+	<div class="achievementlist">
+		<div class="title">
+			<p class="barcode">achievements</p>
+			<p class="firend-count fira">{{ achievementsObtainedCount() }}</p>
+		</div>
+		<div class="achievements">
+			@for (achievement of user.achievements; track $index) {
+				<app-achievement
+					[achievement]="achievement"
+					class="achievement"></app-achievement>
+			}
+		</div>
+	</div>
+</div>

@@ -1,0 +1,42 @@
+.stat-wrapper {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 75px;
+
+	background-color: var(--secondary-color);
+
+	color: white;
+
+	.icon-container {
+		flex-basis: 15%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.icon {
+			color: var(--text-color);
+			font-size: 22px;
+		}
+	}
+	.text {
+		flex-basis: 85%;
+		gap: 5px;
+		display: flex;
+		flex-direction: column;
+		.title {
+			font-size: 21px;
+		}
+		.sub-title {
+			font-size: 12px;
+		}
+	}
+
+	&:not(.obtained) {
+		background-color: var(--background-color);
+		color: var(--secondary-color);
+		.icon-container .icon {
+			color: var(--secondary-color);
+		}
+	}
+}
