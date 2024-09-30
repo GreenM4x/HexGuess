@@ -30,9 +30,9 @@ export class FirebaseService {
 
 	public async getUsernameFromUserId(userId: string): Promise<string> {
 		if (userId) {
-			const playerDoc = await lastValueFrom(this.firestore.collection('players').doc(userId).get());
+			const playerDoc = await lastValueFrom(this.firestore.collection('players').doc<{ username: string }>(userId).get());
 			if (playerDoc.exists) {
-				return (playerDoc.data() as { username: string }).username;
+				return (playerDoc.data()).username;
 			}
 		}
 		return 'Anonymous User 👀';
