@@ -1,7 +1,7 @@
-name: Unstable release
+name: Stable release
 
 concurrency:
-  group: ${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
