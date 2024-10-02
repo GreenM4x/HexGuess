@@ -67,6 +67,7 @@ export default class SocketIOManager {
 			'user_update',
 			Array.from(this.connectedUsers.values()).map((user) => ({
 				username: user.username,
+				sessionId: user.sessionId, // not really needed but cool
 			}))
 		);
 	}
