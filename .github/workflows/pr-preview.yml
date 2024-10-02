@@ -186,7 +186,6 @@ jobs:
   cleanup:
     runs-on: self-hosted
     if: github.event.pull_request.merged == true
-    needs: docker-build-and-push
     steps:
       - name: Remove PR Preview
         run: docker compose -f docker-compose.pr.yml -p pr-${{ github.event.pull_request.number }} down
