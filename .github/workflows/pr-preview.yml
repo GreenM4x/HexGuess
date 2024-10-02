@@ -1,0 +1,193 @@
+name: PR Preview Deployment
+
+concurrency:
+    group: ${{ github.ref }}
+    cancel-in-progress: true
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  pull_request_target:
+    types: [closed]
+
+env:
+  REGISTRY: ghcr.io
+  SERVER_IMAGE: ghcr.io/greenm4x/hexguess-server
+  WEB_IMAGE: ghcr.io/greenm4x/hexguess-web
+
+jobs:
+  start-comment:
+    runs-on: ubuntu-latest
+    name: Add Comment About Build Start
+    permissions:
+        contents: read
+        pull-requests: write
+    outputs:
+      comment_id: ${{ steps.comment.outputs.result }}
+    steps:
+      - name: Add Comment About Build Start
+        id: comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue_number = ${{ github.event.pull_request.number }};
+            const comment = await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number,
+              body: '🚧 Build started! Preparing your PR preview...'
+            });
+            return comment.data.id;
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  docker-build-and-push:
+    needs: start-comment
+    runs-on: ubuntu-latest
+    outputs:
+      comment_id: ${{ needs.start-comment.outputs.comment_id }}
+    if: github.event_name != 'pull_request_target'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - dockerfile: ./backend/Dockerfile
+            image: ghcr.io/greenm4x/hexguess-server
+            path: ./backend
+            name: backend
+          - dockerfile: ./frontend/Dockerfile
+            image: ghcr.io/greenm4x/hexguess-web
+            path: ./frontend
+            name: frontend
+    name: Build & deploy PR preview for ${{ matrix.name }} 🚀
+    permissions:
+        contents: read
+        packages: write
+        pull-requests: write
+
+    steps:
+      - name: Checkout ⬇️
+        uses: actions/checkout@v4
+
+      - name: Configure QEMU ⚙️
+        uses: docker/setup-qemu-action@v3
+
+      - name: Configure Docker Buildx ⚙️
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ matrix.image }}
+
+      - name: Build and push Hexguess PR images 🛠️
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.path }}
+          file: ${{ matrix.dockerfile }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/arm64
+          push: true
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+
+      - name: Handle Build Failure
+        if: failure()
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const comment_id = ${{ needs.start-comment.outputs.comment_id }};
+            await github.rest.issues.updateComment({
+              ...context.repo,
+              comment_id,
+              body: '⚠️ Build failed! Unable to prepare your PR preview. Please be better and check the logs.'
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-preview:
+    runs-on: self-hosted # Raspberry Pi
+    if: github.event_name != 'pull_request_target'
+    needs: docker-build-and-push
+    name: Deploying PR Preview on Raspberry Pi 🚀
+    permissions:
+        contents: read
+        packages: write
+        pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set Environment Variables for Compose
+        run: |
+          echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+
+      - name: Remove old frontend image
+        run: docker rmi ${{env.WEB_IMAGE}}:pr-${{ github.event.pull_request.number }} || true  # Ignore errors if image does not exist
+        
+      - name: Pull latest frontend image
+        run: docker pull ${{env.WEB_IMAGE}}:pr-${{ github.event.pull_request.number }}
+
+      - name: Remove old backend image
+        run: docker rmi ${{env.SERVER_IMAGE}}:pr-${{ github.event.pull_request.number }} || true  # Ignore errors if image does not exist
+
+      - name: Pull latest backend image
+        run: docker pull ${{env.SERVER_IMAGE}}:pr-${{ github.event.pull_request.number }}
+      
+      - name: Deploy PR Preview
+        run: |
+          docker compose -f docker-compose.pr.yml -p pr-${{ github.event.pull_request.number }} up -d --force-recreate --build
+
+      - name: Handle Deployment Failure
+        if: failure()
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const comment_id = ${{ needs.docker-build-and-push.outputs.comment_id }};
+            await github.rest.issues.updateComment({
+              ...context.repo,
+              comment_id,
+              body: `⚠️ Deployment failed! Your PR preview is not available 😕 Please check the logs.`
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Update Comment with Preview URL
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const comment_id = ${{ needs.docker-build-and-push.outputs.comment_id}};
+            const preview_url = `https://hexguess-preview-${{ github.event.pull_request.number }}.kellerkind.dev`;
+            await github.rest.issues.updateComment({
+              ...context.repo,
+              comment_id,
+              body: `🎉 Your PR preview is ready! [View Preview](${preview_url})`
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+
+  cleanup:
+    runs-on: self-hosted
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    needs: docker-build-and-push
+    steps:
+      - name: Remove PR Preview
+        run: docker compose -f docker-compose.pr.yml -p pr-${{ github.event.pull_request.number }} down
+      - name: Remove old unused image
+        run: docker image prune -a -f --filter "label=name=hexguess"
