@@ -18,6 +18,7 @@ env:
 jobs:
   start-comment:
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request_target'
     name: Add Comment About Build Start
     permissions:
         contents: read
@@ -184,7 +185,7 @@ jobs:
 
   cleanup:
     runs-on: self-hosted
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     needs: docker-build-and-push
     steps:
       - name: Remove PR Preview

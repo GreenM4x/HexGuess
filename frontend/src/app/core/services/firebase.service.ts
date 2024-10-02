@@ -6,7 +6,8 @@ import {
 	User,
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { Observable, map, lastValueFrom } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FirebaseError } from 'firebase/app';
 
@@ -14,37 +15,57 @@ import { FirebaseError } from 'firebase/app';
 	providedIn: 'root',
 })
 export class FirebaseService {
-	user$: Observable<User>;
+	user$: Observable<User | null>;
 
 	constructor(
 		private angularAuthService: AngularFireAuth,
 		private firestore: AngularFirestore,
 		private router: Router
 	) {
-		this.user$ = angularAuthService.authState;
+		this.user$ = this.angularAuthService.authState;
 	}
 
 	isLoggedIn(): Observable<boolean> {
-		return this.user$.pipe(map(user => user !== null));
+		return this.user$.pipe(map((user) => user !== null));
+	}
+
+	public async getCurrentUser(): Promise<User | null> {
+		return this.angularAuthService.currentUser;
+	}
+
+	public async getIdToken(): Promise<string | null> {
+		const user = await this.angularAuthService.currentUser;
+		if (user) {
+			return user.getIdToken();
+		}
+		return null;
 	}
 
 	public async getUsernameFromUserId(userId: string): Promise<string> {
 		if (userId) {
-			const playerDoc = await lastValueFrom(this.firestore.collection('players').doc<{ username: string }>(userId).get());
-			if (playerDoc.exists) {
-				return (playerDoc.data()).username;
+			try {
+				const playerDoc = await this.firestore
+					.collection('players')
+					.doc<{ username: string }>(userId)
+					.ref.get();
+
+				if (playerDoc.exists) {
+					return playerDoc.data()?.username ?? 'Anonymous User 👀';
+				}
+			} catch (error) {
+				console.error('Error fetching username:', error);
 			}
 		}
 		return 'Anonymous User 👀';
 	}
 
 	public async logout() {
-		return this.angularAuthService
-			.signOut()
-			.then(() => this.router.navigate(['/auth']))
-			.catch(err => {
-				return Promise.reject(this.getErrorMessage(err));
-			});
+		try {
+			await this.angularAuthService.signOut();
+			await this.router.navigate(['/auth']);
+		} catch (err) {
+			throw this.getErrorMessage(err as FirebaseError);
+		}
 	}
 
 	public async signUpWithEmail(
@@ -52,101 +73,121 @@ export class FirebaseService {
 		password: string,
 		username: string
 	) {
-		const userNameExists = await this.checkUsernameExists(username);
-		if (userNameExists) {
-			return Promise.reject('Username already taken');
-		} else {
-			const user = await this.angularAuthService
-				.createUserWithEmailAndPassword(email, password)
-				.catch((err: FirebaseError) => {
-					return Promise.reject(this.getErrorMessage(err));
-				});
-			return this.createPlayerAndUsername(user, username).catch(
-				(err: FirebaseError) => {
-					return Promise.reject(this.getErrorMessage(err));
-				}
-			);
+		try {
+			const userNameExists = await this.checkUsernameExists(username);
+			if (userNameExists) {
+				throw new Error('Username already taken');
+			} else {
+				const userCredential = await this.angularAuthService.createUserWithEmailAndPassword(
+					email,
+					password
+				);
+				await this.createPlayerAndUsername(userCredential, username);
+				return userCredential;
+			}
+		} catch (err) {
+			throw this.getErrorMessage(err as FirebaseError);
 		}
 	}
 
 	public async signInWithEmail(email: string, password: string) {
-		return this.angularAuthService
-			.signInWithEmailAndPassword(email, password)
-			.catch(err => {
-				return Promise.reject(this.getErrorMessage(err));
-			});
+		try {
+			return await this.angularAuthService.signInWithEmailAndPassword(email, password);
+		} catch (err) {
+			throw this.getErrorMessage(err as FirebaseError);
+		}
 	}
 
 	public async signInWithGoogle() {
-		const userAuth = await this.angularAuthService
-			.signInWithPopup(new GoogleAuthProvider().addScope('profile'))
-			.catch((err: FirebaseError) => {
-				return Promise.reject(this.getErrorMessage(err));
-			});
-		if (userAuth.user.displayName && userAuth.additionalUserInfo?.isNewUser) {
-			await this.initPlayer(userAuth).catch((err: FirebaseError) => {
-				return Promise.reject(this.getErrorMessage(err));
-			});
+		try {
+			const userAuth = await this.angularAuthService.signInWithPopup(
+				new GoogleAuthProvider()
+			);
+
+			if (userAuth.user.displayName && userAuth.additionalUserInfo?.isNewUser) {
+				await this.initPlayer(userAuth);
+			}
+			return userAuth;
+		} catch (err) {
+			throw this.getErrorMessage(err as FirebaseError);
 		}
-		return userAuth;
 	}
 
 	public async signInWithGitHub() {
-		const userAuth = await this.angularAuthService
-			.signInWithPopup(new GithubAuthProvider())
-			.catch((err: FirebaseError) => {
-				return Promise.reject(this.getErrorMessage(err));
-			});
-		if (userAuth.user.displayName && userAuth.additionalUserInfo?.isNewUser) {
-			await this.initPlayer(userAuth).catch((err: FirebaseError) => {
-				return Promise.reject(this.getErrorMessage(err));
-			});
+		try {
+			const userAuth = await this.angularAuthService.signInWithPopup(
+				new GithubAuthProvider()
+			);
+
+			if (userAuth.user.displayName && userAuth.additionalUserInfo?.isNewUser) {
+				await this.initPlayer(userAuth);
+			}
+			return userAuth;
+		} catch (err) {
+			throw this.getErrorMessage(err as FirebaseError);
 		}
-		return userAuth;
 	}
 
 	private async initPlayer(userAuth: firebase.default.auth.UserCredential) {
-		const displayName = userAuth.user.displayName.replaceAll(' ', '_');
-		const userNameExists = await this.checkUsernameExists(displayName);
-		if (!userNameExists) {
-			return this.createPlayerAndUsername(userAuth, displayName).catch(
-				(err: FirebaseError) => {
-					return Promise.reject(this.getErrorMessage(err));
-				}
-			);
-		} else {
-			return Promise.reject(
-				'Username already taken. Try another sign in method.'
-			);
+		try {
+			const displayName = this.sanitizeUsername(userAuth.user.displayName);
+			const userNameExists = await this.checkUsernameExists(displayName);
+			if (!userNameExists) {
+				await this.createPlayerAndUsername(userAuth, displayName);
+			} else {
+				throw new Error(
+					'Username already taken. Please choose a different username.'
+				);
+			}
+		} catch (err) {
+			throw this.getErrorMessage(err as FirebaseError);
 		}
 	}
 
-	private checkUsernameExists(username: string): Promise<boolean> {
-		return lastValueFrom(
-			this.firestore
+	private async checkUsernameExists(username: string): Promise<boolean> {
+		try {
+			const docSnapshot = await this.firestore
 				.collection('usernames')
 				.doc(username.toLowerCase())
-				.get()
-				.pipe(
-					map(docSnapshot => {
-						return docSnapshot.exists;
-					})
-				)
-		);
+				.ref.get();
+
+			return docSnapshot.exists;
+		} catch (error) {
+			console.error('Error checking username:', error);
+			return false;
+		}
 	}
 
 	private async createPlayerAndUsername(
-		result: firebase.default.auth.UserCredential,
+		userCredential: firebase.default.auth.UserCredential,
 		username: string
 	) {
-		return Promise.all([
-			this.firestore.collection('players').doc(result.user.uid).set({
-				username: username,
-			}),
-			this.firestore.collection('usernames').doc(username.toLowerCase()).set({
-				userId: result.user.uid,
-			}),
-		]);
+		const batch = this.firestore.firestore.batch();
+
+		const playerRef = this.firestore.collection('players').doc(userCredential.user.uid).ref;
+		const usernameRef = this.firestore.collection('usernames').doc(username.toLowerCase()).ref;
+
+		batch.set(playerRef, {
+			username: username,
+		});
+
+		batch.set(usernameRef, {
+			userId: userCredential.user.uid,
+		});
+
+		try {
+			await batch.commit();
+		} catch (error: unknown) {
+			throw this.getErrorMessage(error as FirebaseError);
+		}
+	}
+
+	private sanitizeUsername(username: string): string {
+		return username
+			.trim()
+			.replace(/\s+/g, '_')
+			.replace(/[^a-zA-Z0-9_]/g, '')
+			.toLowerCase();
 	}
 
 	private getErrorMessage(err: FirebaseError) {
