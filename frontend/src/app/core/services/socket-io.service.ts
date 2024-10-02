@@ -1,8 +1,8 @@
-import { Injectable, signal } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { Injectable, signal, OnDestroy } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { FirebaseService } from './firebase.service';
 import { User } from 'firebase/auth';
+import { Subscription } from 'rxjs';
 
 interface ConnectedUser {
 	userId: string;
@@ -10,54 +10,88 @@ interface ConnectedUser {
 	sessionId?: string;
 	clientCount?: number;
 }
+
+interface Message {
+	type: 'log'; // TODO: enum, more types
+	data: string;
+}
+
 @Injectable({
 	providedIn: 'root',
 })
-export class SocketIOService {
+export class SocketIOService implements OnDestroy {
 	private socket = signal<Socket | null>(null);
 	private url = signal<string>('');
-	public messages = signal<any[]>([]);
+	public messages = signal<Message[]>([]);
 	public connectedUsers = signal<ConnectedUser[]>([]);
-	public currentUser = signal<ConnectedUser>(null);
+	public currentUser = signal<ConnectedUser | null>(null);
+
+	private userSubscription: Subscription;
 
 	public get isConnected(): boolean {
 		const currentSocket = this.socket();
 		return currentSocket !== null && currentSocket.connected;
 	}
 
-	constructor(private firebaseService: FirebaseService) {}
-
-	public connect(url: string): void {
-		this.url.set(url);
-		this.socket.set(io(url, { path: '/api/ws' }));
-
-		this.socket().on('connect', async () => {
-			if (!this.socket().id) {
-				console.log('Socket.IO connection is not open.');
-				return;
+	constructor(private firebaseService: FirebaseService) {
+		this.userSubscription = this.firebaseService.user$.subscribe(async (user) => {
+			if (user) {
+				const connectedUser = await this.getConnectedUser(user);
+				this.setCurrentUser(connectedUser);
+				if (this.isConnected) {
+					this.sendUserConnectMessage(connectedUser);
+				}
+			} else {
+				// logout or user not logged in
 			}
+		});
+	}
+
+	public async connect(url: string): Promise<void> {
+		this.url.set(url);
+		this.socket.set(
+			io(url, {
+				path: '/api/ws',
+				reconnectionAttempts: 5,
+				reconnectionDelay: 2000,
+			})
+		);
+
+		const socket = this.socket();
+
+		if (!socket) {
+			console.warn('Socket.IO instance is not initialized.');
+			return;
+		}
+
+		socket.on('connect', async () => {
+			console.log('Socket.IO connected:', socket.id);
 
 			try {
-				const user = await this.getUser();
+				const user = await this.firebaseService.getCurrentUser();
 				const connectedUser = await this.getConnectedUser(user);
-				this.sendUserConnectMessage(connectedUser);
 				this.setCurrentUser(connectedUser);
+				this.sendUserConnectMessage(connectedUser);
 			} catch (error) {
 				console.error('Error handling socket connection:', error);
 			}
 		});
 
-		this.socket().on('message', (data: any) => {
+		socket.on('message', (data: Message) => {
 			console.log('New message:', data);
-			this.messages.update(messages => [...messages, data]);
+			this.messages.update((messages) => [...messages, data]);
 		});
 
-		this.socket().on('user_update', (connectedUsers: any[]) => {
+		socket.on('user_update', (connectedUsers: ConnectedUser[]) => {
 			this.updateConnectedUsers(connectedUsers);
 		});
 
-		this.socket().on('disconnect', () => {
+		socket.on('disconnect', () => {
 			console.log('Socket.IO disconnected');
+		});
+
+		socket.on('error', (error: any) => {
+			console.error('Socket error:', error);
 		});
 	}
 
@@ -65,25 +99,21 @@ export class SocketIOService {
 		this.connectedUsers.set(connectedUsers);
 	}
 
-	private async getUser(): Promise<User> {
-		return firstValueFrom(this.firebaseService.user$);
-	}
-
 	private async getConnectedUser(user?: User): Promise<ConnectedUser> {
 		let username: string;
+		let userId: string;
+
 		if (user) {
-			username =
-				user?.displayName ||
-				(await this.firebaseService.getUsernameFromUserId(user?.uid));
+			userId = user.uid;
+			username = user.displayName || (await this.firebaseService.getUsernameFromUserId(user.uid));
+		} else {
+			userId = `guest_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+			username = `Guest_${Math.floor(Math.random() * 10000)}`;
 		}
 
-		const existingUser = this.connectedUsers().find(
-			u => u.username === username
-		);
-		if (existingUser) return existingUser;
 		return {
-			userId: user?.uid || Date.now().toString(),
-			username: username || `Anonymous User ${Date.now()}`,
+			userId,
+			username,
 		};
 	}
 
@@ -96,6 +126,21 @@ export class SocketIOService {
 	}
 
 	private sendMessage(event: string, data: any) {
-		this.socket().emit(event, data);
+		const socket = this.socket();
+		if (socket && socket.connected) {
+			socket.emit(event, data);
+		} else {
+			console.warn('Socket is not connected. Cannot send message.');
+		}
+	}
+
+	ngOnDestroy() {
+		if (this.socket()) {
+			this.socket().disconnect();
+			this.socket.set(null);
+		}
+		if (this.userSubscription) {
+			this.userSubscription.unsubscribe();
+		}
 	}
 }
