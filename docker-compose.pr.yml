@@ -6,10 +6,10 @@ services:
     image: ghcr.io/greenm4x/hexguess-web:pr-${PR_NUMBER}
     restart: unless-stopped
     labels:
-      traefik.enable: true
-      "traefik.http.routers.hexguess-web-pr-${PR_NUMBER}.entrypoints": https
-      "traefik.http.routers.hexguess-web-pr-${PR_NUMBER}.rule": Host(`hexguess-preview-${PR_NUMBER}.kellerkind.dev`)
-      "traefik.http.services.hexguess-web-pr-${PR_NUMBER}.loadbalancer.server.port": 3000
+      - "traefik.enable=true"
+      - "traefik.http.routers.hexguess-web-pr-${PR_NUMBER}.entrypoints=https"
+      - "traefik.http.routers.hexguess-web-pr-${PR_NUMBER}.rule=Host(`hexguess-preview-${PR_NUMBER}.kellerkind.dev`)"
+      - "traefik.http.services.hexguess-web-pr-${PR_NUMBER}.loadbalancer.server.port=3000"
     networks:
       - web
 
@@ -18,10 +18,10 @@ services:
     image: ghcr.io/greenm4x/hexguess-server:pr-${PR_NUMBER}
     restart: unless-stopped
     labels:
-      traefik.enable: true
-      "traefik.http.routers.hexguess-server-pr-${PR_NUMBER}.entrypoints": https
-      "traefik.http.routers.hexguess-server-pr-${PR_NUMBER}.rule": Host(`hexguess-preview-${PR_NUMBER}.kellerkind.dev`) && PathPrefix(`/api`)
-      "traefik.http.services.hexguess-server-pr-${PR_NUMBER}.loadbalancer.server.port": 3000
+      - "traefik.enable=true"
+      - "traefik.http.routers.hexguess-server-pr-${PR_NUMBER}.entrypoints=https"
+      - "traefik.http.routers.hexguess-server-pr-${PR_NUMBER}.rule=Host(`hexguess-preview-${PR_NUMBER}.kellerkind.dev`) && PathPrefix(`/api`)"
+      - "traefik.http.services.hexguess-server-pr-${PR_NUMBER}.loadbalancer.server.port=3000"
     networks:
       - web
 
