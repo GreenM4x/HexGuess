@@ -29,9 +29,13 @@ export default class SocketIOManager {
 		console.log(`🤖 Socket.IO connected: ${socket.id}`);
 
 		socket.on('user_connect', (connectedUser: ConnectedUser) => {
-			if(this.connectedUsers.has(socket.id)) {
+			if (this.connectedUsers.has(socket.id)) {
 				const existingUser = this.connectedUsers.get(socket.id);
-				console.log(`🔄 User ${existingUser.username} is now ${connectedUser.username}`);
+				if (existingUser.username !== connectedUser.username) {
+					console.log(
+						`🔄 User ${existingUser.username} is now ${connectedUser.username}`
+					);
+				}
 			} else {
 				console.log(`➕ User ${connectedUser.username} connected`);
 			}

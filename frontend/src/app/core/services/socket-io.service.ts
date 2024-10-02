@@ -2,7 +2,7 @@ import { Injectable, signal, OnDestroy } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { FirebaseService } from './firebase.service';
 import { User } from 'firebase/auth';
-import { Subscription } from 'rxjs';
+import { Subscription, firstValueFrom } from 'rxjs';
 
 interface ConnectedUser {
 	userId: string;
@@ -35,20 +35,26 @@ export class SocketIOService implements OnDestroy {
 
 	constructor(private firebaseService: FirebaseService) {
 		this.userSubscription = this.firebaseService.user$.subscribe(async (user) => {
-			if (user) {
+			if (this.isConnected) {
 				const connectedUser = await this.getConnectedUser(user);
+				const previousUser = this.currentUser();
 				this.setCurrentUser(connectedUser);
-				if (this.isConnected) {
+
+				// Only send 'user_connect' if the user has changed
+				if (
+					!previousUser ||
+					previousUser.userId !== connectedUser.userId ||
+					previousUser.username !== connectedUser.username
+				) {
 					this.sendUserConnectMessage(connectedUser);
 				}
-			} else {
-				// logout or user not logged in
 			}
 		});
 	}
 
 	public async connect(url: string): Promise<void> {
 		this.url.set(url);
+		const user = await firstValueFrom(this.firebaseService.user$);
 		this.socket.set(
 			io(url, {
 				path: '/api/ws',
@@ -68,7 +74,6 @@ export class SocketIOService implements OnDestroy {
 			console.log('Socket.IO connected:', socket.id);
 
 			try {
-				const user = await this.firebaseService.getCurrentUser();
 				const connectedUser = await this.getConnectedUser(user);
 				this.setCurrentUser(connectedUser);
 				this.sendUserConnectMessage(connectedUser);
@@ -99,13 +104,14 @@ export class SocketIOService implements OnDestroy {
 		this.connectedUsers.set(connectedUsers);
 	}
 
-	private async getConnectedUser(user?: User): Promise<ConnectedUser> {
+	private async getConnectedUser(user?: User | null): Promise<ConnectedUser> {
 		let username: string;
 		let userId: string;
 
 		if (user) {
 			userId = user.uid;
-			username = user.displayName || (await this.firebaseService.getUsernameFromUserId(user.uid));
+			username =
+				user.displayName || (await this.firebaseService.getUsernameFromUserId(user.uid));
 		} else {
 			userId = `guest_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
 			username = `Guest_${Math.floor(Math.random() * 10000)}`;
