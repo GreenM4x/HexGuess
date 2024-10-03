@@ -85,14 +85,16 @@ jobs:
           context: ${{ matrix.path }}
           file: ${{ matrix.dockerfile }}
           tags: |
-            ${{ matrix.image }}:${{ github.event_name == 'push' && github.ref_name == 'main' && 'latest' || github.event.inputs.branch || github.ref_name }}
+            ${{ matrix.image }}:${{ (github.event_name == 'push' && github.ref_name == 'main') || (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main') && 'latest' || github.event.inputs.branch || github.ref_name }}
             ${{ matrix.image }}:${{ github.event.inputs.branch || github.ref_name }}.${{ steps.date.outputs.date }}.${{ steps.sha.outputs.sha }}
             ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/arm64
           push: true
-          cache-from: type=gha,scope=${{ matrix.name }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+          cache-from: |
+            type=registry,ref=${{ matrix.image }}:buildcache
+          cache-to: |
+            type=registry,ref=${{ matrix.image }}:buildcache,mode=max
 
   run-on-pi:
     runs-on: self-hosted # Raspberry Pi
