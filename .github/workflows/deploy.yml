@@ -116,7 +116,7 @@ jobs:
 
       - name: Pull latest server image
         run: |
-          if [ "${{ github.event_name == 'push' && github.ref_name == 'main' }}" = "true" ]; then
+          if [ "${{ (github.event_name == 'push' && github.ref_name == 'main') || (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main') }}" = "true" ]; then
             docker pull ${{ env.SERVER_IMAGE }}:latest
           else
             docker pull ${{ env.SERVER_IMAGE }}:${{ github.event.inputs.branch || github.ref_name }}
@@ -124,7 +124,7 @@ jobs:
 
       - name: Pull latest web image
         run: |
-          if [ "${{ github.event_name == 'push' && github.ref_name == 'main' }}" = "true" ]; then
+          if [ "${{ (github.event_name == 'push' && github.ref_name == 'main') || (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main') }}" = "true" ]; then
             docker pull ${{ env.WEB_IMAGE }}:latest
           else
             docker pull ${{ env.WEB_IMAGE }}:${{ github.event.inputs.branch || github.ref_name }}
