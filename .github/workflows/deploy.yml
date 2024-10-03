@@ -85,7 +85,7 @@ jobs:
           context: ${{ matrix.path }}
           file: ${{ matrix.dockerfile }}
           tags: |
-            ${{ matrix.image }}:${{ (github.event_name == 'push' && github.ref_name == 'main') || (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main') && 'latest' || github.event.inputs.branch || github.ref_name }}
+            ${{ matrix.image }}:${{ ((github.event_name == 'push' && github.ref_name == 'main') || (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main')) && 'latest' || github.event.inputs.branch || github.ref_name }}
             ${{ matrix.image }}:${{ github.event.inputs.branch || github.ref_name }}.${{ steps.date.outputs.date }}.${{ steps.sha.outputs.sha }}
             ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
