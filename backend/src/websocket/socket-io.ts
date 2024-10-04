@@ -20,6 +20,8 @@ export default class SocketIOManager {
 				maxDisconnectionDuration: 2 * 60 * 1000,
 			},
 			path: '/api/ws',
+			pingInterval: 10000,
+			pingTimeout: 5000,
 		});
 
 		this.io.on('connection', this.handleConnection.bind(this));
