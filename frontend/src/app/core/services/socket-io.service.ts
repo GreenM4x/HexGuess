@@ -34,6 +34,7 @@ export class SocketIOService implements OnDestroy {
 	}
 
 	constructor(private firebaseService: FirebaseService) {
+		window.addEventListener('beforeunload', this.handleBeforeUnload);
 		this.userSubscription = this.firebaseService.user$.subscribe(async user => {
 			if (this.isConnected) {
 				const connectedUser = await this.getConnectedUser(user);
@@ -51,6 +52,12 @@ export class SocketIOService implements OnDestroy {
 			}
 		});
 	}
+
+	private handleBeforeUnload = () => {
+		if (this.socket()) {
+			this.socket().disconnect();
+		}
+	};
 
 	public async connect(url: string): Promise<void> {
 		this.url.set(url);
@@ -149,5 +156,6 @@ export class SocketIOService implements OnDestroy {
 		if (this.userSubscription) {
 			this.userSubscription.unsubscribe();
 		}
+		window.removeEventListener('beforeunload', this.handleBeforeUnload);
 	}
 }
