@@ -34,7 +34,7 @@ export class SocketIOService implements OnDestroy {
 	}
 
 	constructor(private firebaseService: FirebaseService) {
-		this.userSubscription = this.firebaseService.user$.subscribe(async (user) => {
+		this.userSubscription = this.firebaseService.user$.subscribe(async user => {
 			if (this.isConnected) {
 				const connectedUser = await this.getConnectedUser(user);
 				const previousUser = this.currentUser();
@@ -84,7 +84,7 @@ export class SocketIOService implements OnDestroy {
 
 		socket.on('message', (data: Message) => {
 			console.log('New message:', data);
-			this.messages.update((messages) => [...messages, data]);
+			this.messages.update(messages => [...messages, data]);
 		});
 
 		socket.on('user_update', (connectedUsers: ConnectedUser[]) => {
@@ -111,7 +111,8 @@ export class SocketIOService implements OnDestroy {
 		if (user) {
 			userId = user.uid;
 			username =
-				user.displayName || (await this.firebaseService.getUsernameFromUserId(user.uid));
+				user.displayName ||
+				(await this.firebaseService.getUsernameFromUserId(user.uid));
 		} else {
 			userId = `guest_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
 			username = `Guest_${Math.floor(Math.random() * 10000)}`;

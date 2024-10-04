@@ -1,12 +1,17 @@
 <div class="container">
 	<div class="logo">
-		<img src="assets/icons/icon-512x512.png" alt="hglogo">
+		<img src="assets/icons/icon-512x512.png" alt="hglogo" />
 	</div>
 	<div class="selection">
-		<button class="barcode" (click)="startGame(gameModes.onlineHex)" [disabled]="true">
+		<button
+			class="barcode"
+			(click)="startGame(gameModes.onlineHex)"
+			[disabled]="true">
 			PLAY ONLINE
 		</button>
-		<button class="barcode" (click)="startGame(gameModes.hexInfinite)">INFINIT</button>
+		<button class="barcode" (click)="startGame(gameModes.hexInfinite)">
+			INFINIT
+		</button>
 		<button class="barcode" (click)="startGame(gameModes.hex)">TOP10</button>
 	</div>
 </div>

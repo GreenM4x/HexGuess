@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "orepor.color-tabs-vscode-ext",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode"
   ]

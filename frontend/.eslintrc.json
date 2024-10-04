@@ -32,35 +32,44 @@
             "style": "kebab-case"
           }
         ],
-        "@typescript-eslint/no-explicit-any":"warn",
+        "@typescript-eslint/no-explicit-any": "warn",
         "prettier/prettier": [
           "error",
           {
-              "endOfLine": "auto"
+            "endOfLine": "auto"
           }
         ]
       }
     },
     {
-      "files": ["*.html"],
-      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
       "rules": {
         "prettier/prettier": [
           "error",
           {
-              "endOfLine": "auto"
+            "endOfLine": "auto"
           }
         ]
       }
     },
     {
-      "files": ["*.json"],
-      "extends": ["plugin:json/recommended", "plugin:prettier/recommended"],
+      "files": [
+        "*.json"
+      ],
+      "extends": [
+        "plugin:json/recommended-legacy",
+        "plugin:prettier/recommended"
+      ],
       "rules": {
         "prettier/prettier": [
           "error",
           {
-              "endOfLine": "auto"
+            "endOfLine": "auto"
           }
         ]
       }
@@ -76,11 +85,23 @@
       "rules": {}
     },
     {
-      "files": ["*.html"],
-      "excludedFiles": ["*inline-template-*.component.html"],
-      "extends": ["plugin:prettier/recommended"],
+      "files": [
+        "*.html"
+      ],
+      "excludedFiles": [
+        "*inline-template-*.component.html"
+      ],
+      "extends": [
+        "plugin:prettier/recommended"
+      ],
       "rules": {
-        "prettier/prettier": ["error", { "parser": "angular", "endOfLine": "auto" }]
+        "prettier/prettier": [
+          "error",
+          {
+            "parser": "angular",
+            "endOfLine": "auto"
+          }
+        ]
       }
     }
   ]

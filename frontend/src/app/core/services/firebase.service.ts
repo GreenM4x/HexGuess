@@ -26,7 +26,7 @@ export class FirebaseService {
 	}
 
 	isLoggedIn(): Observable<boolean> {
-		return this.user$.pipe(map((user) => user !== null));
+		return this.user$.pipe(map(user => user !== null));
 	}
 
 	public async getCurrentUser(): Promise<User | null> {
@@ -78,10 +78,11 @@ export class FirebaseService {
 			if (userNameExists) {
 				throw new Error('Username already taken');
 			} else {
-				const userCredential = await this.angularAuthService.createUserWithEmailAndPassword(
-					email,
-					password
-				);
+				const userCredential =
+					await this.angularAuthService.createUserWithEmailAndPassword(
+						email,
+						password
+					);
 				await this.createPlayerAndUsername(userCredential, username);
 				return userCredential;
 			}
@@ -92,7 +93,10 @@ export class FirebaseService {
 
 	public async signInWithEmail(email: string, password: string) {
 		try {
-			return await this.angularAuthService.signInWithEmailAndPassword(email, password);
+			return await this.angularAuthService.signInWithEmailAndPassword(
+				email,
+				password
+			);
 		} catch (err) {
 			throw this.getErrorMessage(err as FirebaseError);
 		}
@@ -164,8 +168,12 @@ export class FirebaseService {
 	) {
 		const batch = this.firestore.firestore.batch();
 
-		const playerRef = this.firestore.collection('players').doc(userCredential.user.uid).ref;
-		const usernameRef = this.firestore.collection('usernames').doc(username.toLowerCase()).ref;
+		const playerRef = this.firestore
+			.collection('players')
+			.doc(userCredential.user.uid).ref;
+		const usernameRef = this.firestore
+			.collection('usernames')
+			.doc(username.toLowerCase()).ref;
 
 		batch.set(playerRef, {
 			username: username,

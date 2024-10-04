@@ -27,7 +27,7 @@ bootstrapApplication(AppComponent, {
 			AngularFirestoreModule,
 			AngularFireAnalyticsModule,
 			AngularFireAuthModule,
-			FormsModule,
+			FormsModule
 		),
 	],
 }).catch(err => console.error(err));
