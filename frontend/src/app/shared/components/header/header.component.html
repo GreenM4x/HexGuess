@@ -2,14 +2,20 @@
 	<div class="navigation">
 		<button
 			*ngIf="
-				(isLoggedIn | async) && (gameIsActive || router.url === '/profile')
+				(isLoggedIn | async) &&
+				(gameIsActive || router.url === '/profile' || router.url === '/multi')
 			"
 			class="btn back-btn fira"
 			(click)="back()">
 			<fa-icon [icon]="faChevronLeft"></fa-icon>
 		</button>
 		<button
-			*ngIf="(isLoggedIn | async) && !gameIsActive && router.url !== '/profile'"
+			*ngIf="
+				(isLoggedIn | async) &&
+				!gameIsActive &&
+				router.url !== '/profile' &&
+				router.url !== '/multi'
+			"
 			class="btn logout-btn fira"
 			(click)="logout()">
 			<fa-icon [icon]="faRightFromBracket"></fa-icon>

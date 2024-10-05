@@ -18,4 +18,8 @@ export class GameSelectComponent {
 	public startGame(gameMode: GameModeEnum) {
 		this.router.navigate([`game/${gameMode}`]);
 	}
+
+	public goToMultiplayer() {
+		this.router.navigate(['multi']);
+	}
 }
