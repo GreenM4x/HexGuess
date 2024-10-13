@@ -3,10 +3,10 @@
 		<img src="assets/icons/icon-512x512.png" alt="hglogo" />
 	</div>
 	<div class="selection">
-		<button class="barcode">CREATE ROOM</button>
+		<button class="barcode" (click)="createRoom()">CREATE ROOM</button>
 	</div>
 	<div class="rooms">
-		@for (room of rooms; track room) {
+		@for (room of rooms(); track room) {
 			<button class="room fira" (click)="joinRoom(room.id)">
 				<div class="descr">
 					<div class="name">{{ room.name }}</div>

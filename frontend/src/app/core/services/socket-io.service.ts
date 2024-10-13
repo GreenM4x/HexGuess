@@ -16,6 +16,15 @@ interface Message {
 	data: string;
 }
 
+interface Room {
+	id: string;
+	name: string;
+	creator: string;
+	mode: string;
+	maxPlayers: number;
+	connectedPlayers: string[];
+}
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -25,6 +34,8 @@ export class SocketIOService implements OnDestroy {
 	public messages = signal<Message[]>([]);
 	public connectedUsers = signal<ConnectedUser[]>([]);
 	public currentUser = signal<ConnectedUser | null>(null);
+	public rooms = signal<Room[]>([]);
+	public currentRoom = signal<Room | null>(null);
 
 	private userSubscription: Subscription;
 
@@ -98,6 +109,17 @@ export class SocketIOService implements OnDestroy {
 			this.updateConnectedUsers(connectedUsers);
 		});
 
+		socket.on('room_update', (rooms: Room[]) => {
+			this.updateRooms(rooms);
+		});
+
+		socket.on(
+			'room_player_update',
+			(data: { roomId: string; connectedPlayers: string[] }) => {
+				this.updateRoomPlayers(data);
+			}
+		);
+
 		socket.on('disconnect', () => {
 			console.log('Socket.IO disconnected');
 		});
@@ -109,6 +131,68 @@ export class SocketIOService implements OnDestroy {
 
 	public updateConnectedUsers(connectedUsers: ConnectedUser[]) {
 		this.connectedUsers.set(connectedUsers);
+	}
+
+	public updateRooms(rooms: Room[]) {
+		this.rooms.set(rooms);
+	}
+
+	public updateRoomPlayers(data: {
+		roomId: string;
+		connectedPlayers: string[];
+	}) {
+		const rooms = this.rooms();
+		const roomIndex = rooms.findIndex(room => room.id === data.roomId);
+		if (roomIndex !== -1) {
+			rooms[roomIndex].connectedPlayers = data.connectedPlayers;
+			this.rooms.set([...rooms]);
+			if (this.currentRoom() && this.currentRoom().id === data.roomId) {
+				this.currentRoom.set(rooms[roomIndex]);
+			}
+		}
+	}
+
+	public createRoom(roomData: {
+		name: string;
+		mode: string;
+		maxPlayers: number;
+	}) {
+		return new Promise<Room>((resolve, reject) => {
+			this.sendMessageWithCallback('create_room', roomData, (response: any) => {
+				if (response.success) {
+					this.currentRoom.set(response.room);
+					resolve(response.room);
+				} else {
+					reject(response.message);
+				}
+			});
+		});
+	}
+
+	public joinRoom(roomId: string) {
+		return new Promise<Room>((resolve, reject) => {
+			this.sendMessageWithCallback('join_room', roomId, (response: any) => {
+				if (response.success) {
+					this.currentRoom.set(response.room);
+					resolve(response.room);
+				} else {
+					reject(response.message);
+				}
+			});
+		});
+	}
+
+	public leaveRoom(roomId: string) {
+		return new Promise<void>((resolve, reject) => {
+			this.sendMessageWithCallback('leave_room', roomId, (response: any) => {
+				if (response.success) {
+					this.currentRoom.set(null);
+					resolve();
+				} else {
+					reject(response.message);
+				}
+			});
+		});
 	}
 
 	private async getConnectedUser(user?: User | null): Promise<ConnectedUser> {
@@ -143,6 +227,19 @@ export class SocketIOService implements OnDestroy {
 		const socket = this.socket();
 		if (socket && socket.connected) {
 			socket.emit(event, data);
+		} else {
+			console.warn('Socket is not connected. Cannot send message.');
+		}
+	}
+
+	private sendMessageWithCallback<T>(
+		event: string,
+		data: any,
+		callback: (response: any) => T
+	) {
+		const socket = this.socket();
+		if (socket && socket.connected) {
+			socket.emit(event, data, callback);
 		} else {
 			console.warn('Socket is not connected. Cannot send message.');
 		}
