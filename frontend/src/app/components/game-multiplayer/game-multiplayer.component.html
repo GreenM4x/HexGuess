@@ -1,0 +1,25 @@
+<div class="container fira">
+	<div class="logo">
+		<img src="assets/icons/icon-512x512.png" alt="hglogo" />
+	</div>
+	<div class="selection">
+		<button class="barcode" (click)="createRoom()">CREATE ROOM</button>
+	</div>
+	<div class="rooms">
+		@for (room of rooms(); track room) {
+			<button class="room fira" (click)="joinRoom(room.id)">
+				<div class="descr">
+					<div class="name">{{ room.name }}</div>
+					<div class="mode">{{ room.mode }}</div>
+				</div>
+				<div class="info">
+					<div class="by">{{ room.creator }}</div>
+					<div class="players">
+						{{ room.connectedPlayers.length }} /
+						{{ room.maxPlayers }}
+					</div>
+				</div>
+			</button>
+		}
+	</div>
+</div>

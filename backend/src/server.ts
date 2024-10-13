@@ -1,14 +1,14 @@
 import express from 'express';
 import { createServer } from 'node:http';
 import cors from 'cors';
-import SocketIOLogs from './websocket/socket-io.js';
+import SocketIOManager from './websocket/socket-io.js';
 import 'dotenv/config';
 
 const app = express();
 const port = 3000;
 
 const server = createServer(app);
-export const io = new SocketIOLogs(server);
+export const io = new SocketIOManager(server);
 
 app.use(cors());
 

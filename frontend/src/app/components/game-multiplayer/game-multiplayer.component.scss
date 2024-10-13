@@ -1,0 +1,109 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.logo {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-basis: 55%;
+		width: 100%;
+		img {
+			width: 100%;
+		}
+	}
+	.selection {
+		flex-basis: auto;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+		width: 100%;
+		padding: 20px;
+		gap: 10px;
+
+		button:first-child {
+			flex-basis: 100%;
+		}
+		button {
+			flex-basis: 48%;
+			cursor: pointer;
+			font-size: 36px;
+			height: 75px;
+			background-color: var(--primary-color);
+			color: var(--text-color);
+			border: none;
+
+			&:hover {
+				background-color: var(--secondary-color);
+			}
+			&:disabled {
+				background-color: var(--secondary-color);
+				cursor: initial;
+			}
+		}
+	}
+}
+
+.rooms {
+  width: 100%;
+  background-color: var(--background-color);
+  border: 5px solid white;
+  height: 100%;
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  position: relative;
+
+  &::before {
+    content: 'Rooms';
+    font-size: 24px;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    position: absolute;
+    top: -20px;
+    padding: 0 10px;
+  }
+  
+  .room {
+    width: 50%;
+    height: 100%;
+    max-height: fit-content;
+    display: flex;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border-radius: 5px;
+    padding: 10px;
+    gap: 10px;
+    border: none;
+    
+    &:hover {
+      background-color: var(--secondary-color);
+      cursor: pointer;
+    }
+    
+    .descr {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: flex-start;
+      text-align: left;
+      .name {
+        font-size: 16px;
+      }
+    }
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 12px;
+      align-items: flex-end;
+      text-align: right;
+      flex-shrink: 0;
+      
+    }
+  }
+}

@@ -29,19 +29,19 @@ export class GameBoardComponent implements OnDestroy {
 	public lives: Signal<boolean[]> = computed(() => this.updateLivesArray());
 
 	public get gameState() {
-		return this.gameStateSerivce.getGameState();
+		return this.gameStateService.getGameState();
 	}
 
 	public get currentRound() {
-		return this.gameStateSerivce.getCurrentRound();
+		return this.gameStateService.getCurrentRound();
 	}
 
 	public get config() {
-		return this.gameStateSerivce.getConfig;
+		return this.gameStateService.getConfig;
 	}
 
 	constructor(
-		public gameStateSerivce: GameStateService,
+		public gameStateService: GameStateService,
 		private gameLogicService: GameLogicService,
 		private gameConfigurationService: GameConfigurationService,
 		private activatedRoute: ActivatedRoute
@@ -49,28 +49,28 @@ export class GameBoardComponent implements OnDestroy {
 		this.activatedRoute.params.subscribe(params => {
 			const gameMode: GameModeEnum = params['gameMode'];
 			this.gameConfigurationService.updateGameConfig(gameMode);
-			this.gameStateSerivce.startNewGame();
+			this.gameStateService.startNewGame();
 		});
 	}
 
 	public processGuess(color: string) {
 		this.gameLogicService.processGuess({
 			hexGuess: color,
-			score: this.gameStateSerivce.getTimer(),
+			score: this.gameStateService.getTimer(),
 		});
 	}
 
 	public restartGame() {
-		this.gameStateSerivce.startNewGame();
+		this.gameStateService.startNewGame();
 	}
 
 	public ngOnDestroy(): void {
-		this.gameStateSerivce.endGame();
+		this.gameStateService.endGame();
 	}
 
 	private updateLivesArray() {
 		const startingLives = this.config.lives.count;
-		const lives = this.gameStateSerivce.getLivesCount();
+		const lives = this.gameStateService.getLivesCount();
 		return Array(startingLives)
 			.fill(false)
 			.map((life, index) => index >= lives);
