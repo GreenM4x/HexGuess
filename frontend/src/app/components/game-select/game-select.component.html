@@ -3,12 +3,7 @@
 		<img src="assets/icons/icon-512x512.png" alt="hglogo" />
 	</div>
 	<div class="selection">
-		<button
-			class="barcode"
-			(click)="startGame(gameModes.onlineHex)"
-			[disabled]="true">
-			PLAY ONLINE
-		</button>
+		<button class="barcode" (click)="lobby()">PLAY ONLINE</button>
 		<button class="barcode" (click)="startGame(gameModes.hexInfinite)">
 			INFINIT
 		</button>

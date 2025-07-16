@@ -1,0 +1,23 @@
+<div class="wrapper">
+	<section class="color-to-guess-section"></section>
+	<section class="selection">
+		<div class="ctg-container">
+			<div
+				class="color-to-guess"
+				[ngStyle]="{
+					'--color-to-guess': safeColor
+				}"></div>
+		</div>
+		<div class="input-wrapper fira">
+			<input
+				class="fira"
+				type="text"
+				[value]="value"
+				(input)="onInput($event)"
+				maxlength="7"
+				placeholder="lobby-code" />
+		</div>
+		<button class="barcode">JOIN</button>
+		<button class="barcode">CREATE LOBBY</button>
+	</section>
+</div>
