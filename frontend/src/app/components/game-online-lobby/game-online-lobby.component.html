@@ -17,7 +17,7 @@
 				maxlength="7"
 				placeholder="lobby-code" />
 		</div>
-		<button class="barcode">JOIN</button>
+		<button class="barcode" [disabled]="!isValidColor">JOIN</button>
 		<button class="barcode">CREATE LOBBY</button>
 	</section>
 </div>

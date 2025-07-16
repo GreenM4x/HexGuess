@@ -10,31 +10,27 @@ import { Component } from '@angular/core';
 })
 export class GameOnlineLobbyComponent {
 	value = '#';
+	isValidColor = false;
 
 	onInput(event: Event) {
 		const input = event.target as HTMLInputElement;
 
-		console.log(input.value);
-		// Remove first char if it's # or not
+		// Remove # if present and keep only hex chars
 		const userPart = input.value.startsWith('#')
 			? input.value.slice(1)
 			: input.value;
+		const colorCodePart = userPart.replace(/[^0-9a-fA-F]/g, '').toUpperCase();
 
-		// Keep only digits
-		const colorCodePart = userPart.replace(/[^0-9a-fA-F]/g, '');
-
-		// Always reset the input's value directly
+		// Always update input value
 		input.value = '#' + colorCodePart;
-
-		// Update Angular value so Angular stays in sync
 		this.value = '#' + colorCodePart;
+
+		// ✅ Update validity only now, once
+		this.isValidColor = /^#[0-9A-F]{6}$/.test(this.value);
 	}
 
 	get safeColor(): string {
 		const hexRegex = /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/;
-		if (hexRegex.test(this.value)) {
-			return this.value;
-		}
-		return '#000000'; // fallback color
+		return hexRegex.test(this.value) ? this.value : '#000000';
 	}
 }
