@@ -8,16 +8,18 @@
 					'--color-to-guess': safeColor
 				}"></div>
 		</div>
-		<div class="input-wrapper fira">
-			<input
-				class="fira"
-				type="text"
-				[value]="value"
-				(input)="onInput($event)"
-				maxlength="7"
-				placeholder="lobby-code" />
+		<div class="button-wrapper">
+			<div class="input-wrapper fira">
+				<input
+					class="fira"
+					type="text"
+					[value]="value"
+					(input)="onInput($event)"
+					maxlength="7"
+					placeholder="lobby-code" />
+			</div>
+			<button class="barcode" [disabled]="!isValidColor">JOIN</button>
+			<button class="barcode">CREATE LOBBY</button>
 		</div>
-		<button class="barcode" [disabled]="!isValidColor">JOIN</button>
-		<button class="barcode">CREATE LOBBY</button>
 	</section>
 </div>
